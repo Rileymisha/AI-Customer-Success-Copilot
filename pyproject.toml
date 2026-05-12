@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ai-customer-success-copilot"
+name = "ai-cs-copilot"
 version = "0.1.0"
-description = "AI-Customer-Success-Copilot: Enterprise-Grade AI-Powered Customer Success Intelligence Platform"
+description = "AI 客户成功助手：经营数据分析、风险识别与报告生成"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }

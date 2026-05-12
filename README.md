@@ -8,7 +8,7 @@
 </p>
 
 <h1 align="center">
-  🤖 AI Customer Success Copilot
+  🤖 AI-Customer-Success-Copilot
 </h1>
 
 <p align="center">
@@ -54,9 +54,9 @@
 
 ## 🚀 1. Project Overview
 
-**AI Customer Success Copilot** is an enterprise-level, AI-driven customer success intelligence platform built for B2B SaaS Customer Success Managers (CSMs). It automatically ingests customer operational data, performs multi-dimensional risk scoring, retrieves relevant knowledge from a local RAG knowledge base, invokes LLMs for deep business insights, and generates structured enterprise reports — all orchestrated by an intelligent **Multi-Tool AI Agent**.
+**AI-Customer-Success-Copilot** is an enterprise-level, AI-driven customer success intelligence platform purpose-built for B2B SaaS Customer Success teams. It ingests customer operational data, performs multi-dimensional risk scoring, retrieves relevant knowledge from a local RAG knowledge base, invokes LLMs for deep business insights, and generates structured enterprise reports with charts and PPT — all orchestrated by an intelligent **Multi-Tool AI Agent**.
 
-> **Core Philosophy**: Replace manual, spreadsheet-based customer health reviews with an intelligent, automated, and extensible Agentic pipeline.
+> **Core Philosophy**: Replace manual spreadsheet-based customer health reviews with an intelligent, automated, and extensible Agentic pipeline. Turn 4 hours of manual reporting into 30 seconds of AI automation.
 
 ```python
 # One line to run the entire enterprise reporting pipeline
@@ -64,7 +64,7 @@ from tools.agent import MultiToolAgent
 
 agent = MultiToolAgent()
 result = agent.run(task="生成企业经营分析报告", df=customer_data)
-# → Markdown Report + PPT + Charts + RAG Context
+# → Markdown Report + PPT Deck + Charts + RAG Context
 ```
 
 ### ✨ What Makes This Project Different?
@@ -94,7 +94,7 @@ In B2B SaaS enterprises, Customer Success Managers (CSMs) are responsible for hu
 │                                                                  │
 │  📊  Raw Data Sprawl: 分散在 CRM、产品数据库、Excel 中的客户数据     │
 │  📋  Manual Reporting: CSM 每周花 4-6 小时手工做报告                │
-│  🧠  Knowledge Silos: 高绩效 CSM 的经验分散在 Slack/wiki 中        │
+│  🧠  Knowledge Silos: 高绩效 CSM 的经验分散在 Slack/Wiki 中        │
 │  🔄  Inconsistent Follow-up: 风险响应依赖个人经验，缺乏标准化流程    │
 │  📉  Reactive Not Proactive: 发现风险时往往已经太晚                 │
 │                                                                  │
@@ -109,13 +109,13 @@ The traditional CSM workflow is **reactive, manual, and non-scalable**. When a C
 
 ## 🎯 3. Enterprise Business Pain Points
 
-This project directly addresses 6 critical pain points in enterprise customer success operations:
+This project directly addresses **6 critical pain points** in enterprise customer success operations:
 
 <br>
 
 ### 🥇 Pain Point 1: Customer Churn Detection is Too Late
 
-Most CS teams discover churn risk during quarterly business reviews — by then, the customer has already mentally checked out.
+> Most CS teams discover churn risk during quarterly business reviews — by then, the customer has already mentally checked out.
 
 **Solution**: Real-time risk scoring engine with 10+ behavioral indicators (login frequency, feature adoption, renewal proximity, complaint velocity) that flags at-risk customers weeks before they churn.
 
@@ -123,7 +123,7 @@ Most CS teams discover churn risk during quarterly business reviews — by then,
 
 ### 🥇 Pain Point 2: Knowledge is Trapped in Silos
 
-High-performing CSMs develop deep expertise in handling specific scenarios (renewal negotiations, feature adoption coaching, complaint resolution), but this knowledge never gets institutionalized.
+> High-performing CSMs develop deep expertise in handling specific scenarios (renewal negotiations, feature adoption coaching, complaint resolution), but this knowledge never gets institutionalized.
 
 **Solution**: RAG-powered knowledge base that stores and retrieves best practices, enabling every CSM to perform at the level of the top performer.
 
@@ -131,7 +131,7 @@ High-performing CSMs develop deep expertise in handling specific scenarios (rene
 
 ### 🥇 Pain Point 3: Report Creation is a Time Sink
 
-CSMs spend 20-30% of their week manually creating reports for internal reviews and client QBRs (Quarterly Business Reviews).
+> CSMs spend 20-30% of their week manually creating reports for internal reviews and client QBRs.
 
 **Solution**: Automated report generation pipeline that produces structured Markdown reports and professional PPT presentations with embedded charts in under 30 seconds.
 
@@ -139,7 +139,7 @@ CSMs spend 20-30% of their week manually creating reports for internal reviews a
 
 ### 🥇 Pain Point 4: Inconsistent Risk Assessment
 
-Without standardized risk criteria, different CSMs assess the same customer differently, leading to inconsistent prioritization.
+> Without standardized risk criteria, different CSMs assess the same customer differently, leading to inconsistent prioritization.
 
 **Solution**: Rule-based, deterministic risk scoring engine with transparent, auditable scoring criteria (vs. opaque ML black boxes).
 
@@ -147,7 +147,7 @@ Without standardized risk criteria, different CSMs assess the same customer diff
 
 ### 🥇 Pain Point 5: Disconnected Toolchain
 
-CSMs jump between CRM, analytics tools, Excel, and PowerPoint to produce a single customer health report.
+> CSMs jump between CRM, analytics tools, Excel, and PowerPoint to produce a single customer health report.
 
 **Solution**: Multi-Tool Agent architecture that seamlessly orchestrates data analysis, knowledge retrieval, charting, and report generation in a single pipeline.
 
@@ -155,7 +155,7 @@ CSMs jump between CRM, analytics tools, Excel, and PowerPoint to produce a singl
 
 ### 🥇 Pain Point 6: Lack of AI Governance
 
-Many AI solutions are black boxes — you can't explain why a customer was flagged as high risk.
+> Many AI solutions are black boxes — you can't explain why a customer was flagged as high risk.
 
 **Solution**: Dual-track architecture where rule engine provides **deterministic, auditable** scoring, and AI adds **creative, contextual** insights. Two systems cross-validate each other.
 
@@ -185,8 +185,8 @@ Many AI solutions are black boxes — you can't explain why a customer was flagg
 
 ### Feature Breakdown
 
-| Feature | Description | Technology |
-|---------|-------------|-----------|
+| Feature | Description | Core Technology |
+|---------|-------------|----------------|
 | **📊 Data Overview** | Interactive table with all customer metrics, CSV upload & download | Streamlit + Pandas |
 | **🚨 Risk Scoring Engine** | 4-dimensional risk scoring (login, adoption, renewal, complaints) | Custom rule engine |
 | **🧠 RAG Knowledge Base** | Auto-diagnose customer issues → retrieve relevant strategies | LangChain + FAISS |
@@ -196,7 +196,7 @@ Many AI solutions are black boxes — you can't explain why a customer was flagg
 | **📽️ PPT Deck** | 9-slide professional presentation with embedded charts | python-pptx |
 | **🧩 Multi-Tool Agent** | 5 independent tools orchestrated via LangChain Tool Calling | Custom Agent |
 | **🔧 Workflow Pipeline** | 8-step Pipeline with critical/non-critical step isolation | Custom Pipeline |
-| **📜 History** | All reports archived in SQLite with timeline view | SQLite + Pandas |
+| **📜 History** | All reports archived in SQLite with timeline view | SQLite |
 
 ---
 
@@ -206,7 +206,7 @@ Many AI solutions are black boxes — you can't explain why a customer was flagg
 
 ### Multi-Tool Agent Execution Flow
 
-The system's intelligence is powered by a **Multi-Tool AI Agent** that automatically plans and executes a sequence of tool calls based on the task description.
+The system's core intelligence is powered by a **Multi-Tool AI Agent** that automatically plans and executes a sequence of tool calls based on the task description. This follows the **LangChain Tool Calling** paradigm.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────┐
@@ -220,26 +220,37 @@ The system's intelligence is powered by a **Multi-Tool AI Agent** that automatic
 │  ┌────────────────────────────────────────────────────────────────┐   │
 │  │                    Task Planning (_plan)                        │   │
 │  │  "生成企业经营分析报告" → Analyze task → Generate tool sequence │   │
+│  │                                                                 │   │
+│  │  ┌─────────────────────────────────────────────────────────┐    │   │
+│  │  │  Current: Rule-based Pipeline (deterministic, fast)     │    │   │
+│  │  │  Future: LLM-based dynamic planning (flexible, smart)   │    │   │
+│  │  └─────────────────────────────────────────────────────────┘    │   │
 │  └────────────────────────────────────────────────────────────────┘   │
 │                                  │                                     │
 │                                  ▼                                     │
 │  ┌────────────────────────────────────────────────────────────────┐   │
 │  │                    Tool Execution Pipeline                       │   │
 │  │                                                                  │   │
-│  │  Step 1  [Critical]  data_analysis    ──  Risk scoring + classify│   │
-│  │       │                                                          │   │
-│  │       ▼                                                          │   │
-│  │  Step 2  [Optional]  rag_query        ──  Knowledge base search  │   │
-│  │       │                                                          │   │
-│  │       ▼                                                          │   │
-│  │  Step 3  [Optional]  chart_generation  ──  matplotlib charts (4) │   │
-│  │       │                                                          │   │
-│  │       ▼                                                          │   │
-│  │  Step 4  [Optional]  report_generation  ──  Markdown report      │   │
-│  │       │                                                          │   │
-│  │       ▼                                                          │   │
-│  │  Step 5  [Optional]  ppt_generation    ──  PPT deck (9 slides)   │   │
+│  │  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐      │   │
+│  │  │  Step 1      │───▶│  Step 2      │───▶│  Step 3      │      │   │
+│  │  │  data_       │    │  rag_query   │    │  chart_      │      │   │
+│  │  │  analysis    │    │  (Optional)  │    │  generation  │      │   │
+│  │  │  [CRITICAL]  │    │              │    │  (Optional)  │      │   │
+│  │  └──────┬───────┘    └──────────────┘    └──────┬───────┘      │   │
+│  │         │                                       │               │   │
+│  │         ▼                                       ▼               │   │
+│  │  ┌─────────────────────────────────────────────────────────┐    │   │
+│  │  │  AgentContext (Shared Data Bus between tools)            │    │   │
+│  │  │  df → df_annotated → categories → rag_context →         │    │   │
+│  │  │  chart_paths → markdown_path → ppt_path                 │    │   │
+│  │  └─────────────────────────────────────────────────────────┘    │   │
 │  │                                                                  │   │
+│  │  ┌──────────────┐    ┌──────────────┐                           │   │
+│  │  │  Step 4      │───▶│  Step 5      │                           │   │
+│  │  │  report_     │    │  ppt_        │                           │   │
+│  │  │  generation  │    │  generation  │                           │   │
+│  │  │  (Optional)  │    │  (Optional)  │                           │   │
+│  │  └──────────────┘    └──────────────┘                           │   │
 │  └────────────────────────────────────────────────────────────────┘   │
 │                                  │                                     │
 │                                  ▼                                     │
@@ -258,7 +269,7 @@ The system's intelligence is powered by a **Multi-Tool AI Agent** that automatic
 ┌───────────────────────────────────────────────────────┐
 │              Pipeline Error Isolation                   │
 │                                                         │
-│  data_analysis     [CRITICAL]  ──  Fail → STOP         │
+│  data_analysis     [CRITICAL]  ──  Fail → STOP          │
 │  rag_query         [NON-CRIT]  ──  Fail → SKIP → CONTINUE│
 │  chart_generation  [NON-CRIT]  ──  Fail → SKIP → CONTINUE│
 │  report_generation [NON-CRIT]  ──  Fail → SKIP → CONTINUE│
@@ -313,7 +324,7 @@ The system implements a **local Retrieval-Augmented Generation (RAG)** system us
 │         ▼                                                           │
 │  ┌────────────────────────────────────────────────────────┐        │
 │  │              Context Assembly (build_context)           │        │
-│  │  "## 知识库参考内容\n[参考 1]（来源：renewal_strategy.md）\n..."  │
+│  │  "## 知识库参考内容\n[参考 1]（来源：renewal_strategy.md）\n..."  │        │
 │  └────────────────────────────────────────────────────────┘        │
 │                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
@@ -321,8 +332,8 @@ The system implements a **local Retrieval-Augmented Generation (RAG)** system us
 
 ### Knowledge Base Documents
 
-| Document | Topic | Query Trigger |
-|----------|-------|--------------|
+| Document | Topic | Trigger Condition |
+|----------|-------|-----------------|
 | `low_login_solutions.md` | 低登录活跃度解决方案 | `login_days < 10` |
 | `customer_retention.md` | 客户投诉处理与留存 | `complaint_count > 3` |
 | `renewal_strategy.md` | 续约策略与客户挽回 | `renewal_days_left < 0` |
@@ -335,9 +346,21 @@ The system implements a **local Retrieval-Augmented Generation (RAG)** system us
 | Document Loader | LangChain `DirectoryLoader` + `TextLoader` | Glob: `**/*.md` |
 | Text Splitter | `RecursiveCharacterTextSplitter` | Chunk: 600 / Overlap: 120 |
 | Embedding Model | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` | 384-dim, multilingual |
-| Vector Store | FAISS (CPU) | Persisted to `storage/faiss_index/` |
+| Vector Store | **FAISS** (CPU) | Persisted to `storage/faiss_index/` |
 | Similarity Search | FAISS `similarity_search(k=2)` | Top 2 chunks per query |
 | Fallback | Graceful degradation if deps missing | Warning log + empty result |
+
+### Key Design Decisions
+
+```
+Why FAISS + local embeddings instead of a cloud vector database?
+
+  1. Zero external dependencies — runs fully offline
+  2. No recurring API costs for embedding
+  3. No data leaves the enterprise network
+  4. FAISS CPU is fast enough for 100K+ document scales
+  5. Index persistence avoids re-building on restart
+```
 
 ---
 
@@ -350,7 +373,7 @@ The **Multi-Tool Agent** is the brain of the system. Unlike traditional hard-cod
 ### Tool Registration Pattern
 
 ```python
-# Each tool self-registers with metadata
+# Each tool self-registers with metadata for the Agent
 class DataAnalysisTool(BaseTool):
     @property
     def name(self) -> str:
@@ -368,7 +391,7 @@ class DataAnalysisTool(BaseTool):
             parameters=[ToolParameter(name="df", type="object", ...)],
         )
 
-# Agent registers and orchestrates
+# Agent discovers and orchestrates
 agent = MultiToolAgent()
 agent.register_tool(DataAnalysisTool())
 agent.register_tool(RAGQueryTool())
@@ -382,19 +405,19 @@ agent.register_tool(PPTTool())
 Tools never call each other directly. They communicate through a shared context object:
 
 ```
-AgentContext (Shared Data Bus)
+AgentContext (Shared Data Bus — single source of truth)
 │
-├── df: DataFrame              # Raw customer data
+├── df: DataFrame              # Raw customer data from CSV
 ├── df_annotated: DataFrame    # After risk scoring (added risk_level column)
-├── categories: Dict           # classified: {high_risk, high_value, growth}
-├── rag_context: str           # RAG knowledge base results
+├── categories: Dict           # Classified: {high_risk, high_value, growth}
+├── rag_context: str           # RAG knowledge base retrieval results
 ├── chart_paths: Dict          # {gmv_bar, risk_pie, industry_bar, region_bar}
 ├── markdown_path: str         # Path to generated .md report
 ├── ppt_path: str              # Path to generated .pptx file
-└── execution_log: List        # Per-step execution trace
+└── execution_log: List        # Per-step execution trace for observability
 ```
 
-### Design Philosophy
+### Design Philosophy: Dual-Track "Rule + AI"
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
@@ -409,8 +432,8 @@ AgentContext (Shared Data Bus)
 │   │ ✓ Chart Generation   │    │ ✓ Action Plans      │           │
 │   │ ✓ Report Formatting  │    │ ✓ Open-ended Analysis│          │
 │   │                      │    │                      │          │
-│   │ Fast (ms) │ Cheap    │    │ Creative │ Flexible  │          │
-│   │ 0 Hallucination      │    │ May Hallucinate      │          │
+│   │ Fast    │ 0 Halluc.  │    │ Creative │ Flexible  │          │
+│   │ Cheap   │ Auditable  │    │ May Hallucinate      │          │
 │   └─────────────────────┘    └─────────────────────┘           │
 │                         │                                      │
 │                         ▼                                      │
@@ -424,13 +447,13 @@ AgentContext (Shared Data Bus)
 
 ### 5 Registered Tools
 
-| Tool | Name | Dependencies | Is Critical | Output |
-|------|------|-------------|-------------|--------|
-| 🏷️ Data Analysis | `data_analysis` | None | ✅ Yes | `df_annotated`, `categories` |
-| 🔍 RAG Query | `rag_query` | langchain, FAISS | ❌ No | `rag_context` string |
-| 📈 Chart Generation | `chart_generation` | matplotlib | ❌ No | `chart_paths` dict (4 PNGs) |
-| 📝 Markdown Report | `report_generation` | None | ❌ No | `markdown_path` string |
-| 📽️ PPT Generation | `ppt_generation` | python-pptx | ❌ No | `ppt_path` string |
+| Tool | Name | Dependencies | Critical | Output |
+|------|------|-------------|----------|--------|
+| 🏷️ **Data Analysis** | `data_analysis` | None | ✅ Yes | `df_annotated`, `categories` |
+| 🔍 **RAG Query** | `rag_query` | langchain, FAISS | ❌ No | `rag_context` string |
+| 📈 **Chart Generation** | `chart_generation` | matplotlib | ❌ No | `chart_paths` dict (4 PNGs) |
+| 📝 **Markdown Report** | `report_generation` | None | ❌ No | `markdown_path` |
+| 📽️ **PPT Generation** | `ppt_generation` | python-pptx | ❌ No | `ppt_path` |
 
 ---
 
@@ -455,7 +478,7 @@ AgentContext (Shared Data Bus)
 │   ┌─────────────────────────────────────────────────────────┐  │
 │   │  Architecture Patterns                                   │  │
 │   │──────────────────────────────────────────────────────────│  │
-│   │  ✔ Tool Calling (LangChain-style)                       │  │
+│   │  ✔ Tool Calling (LangChain-style Agent)                 │  │
 │   │  ✔ Pipeline / Workflow Pattern                          │  │
 │   │  ✔ RAG (Retrieval-Augmented Generation)                 │  │
 │   │  ✔ Agentic Orchestration                                │  │
@@ -472,18 +495,18 @@ AgentContext (Shared Data Bus)
 |----------|-----------|---------|---------|
 | **UI Framework** | Streamlit | ≥ 1.28 | Interactive web dashboard |
 | **Data Processing** | Pandas | ≥ 2.0 | CSV loading, transformation, analysis |
-| **Risk Engine** | Custom Rule Engine | — | Deterministic risk scoring (no ML black box) |
-| **LLM Provider** | DeepSeek (via OpenAI SDK) | — | AI insights, strategy generation |
-| **LLM SDK** | OpenAI Python | ≥ 1.40 | OpenAI-compatible API client |
-| **RAG Framework** | LangChain | ≥ 0.2 | Document loading, splitting, retrieval |
-| **Vector Store** | FAISS (CPU) | ≥ 1.7 | Local vector similarity search |
-| **Embeddings** | sentence-transformers | ≥ 2.2 | Multilingual text vectorization |
+| **Risk Engine** | Custom Rule Engine | — | Deterministic risk scoring (transparent & auditable) |
+| **LLM Provider** | DeepSeek (OpenAI-compatible) | — | AI insights, strategy generation |
+| **LLM SDK** | OpenAI Python SDK | ≥ 1.40 | API client (pluggable — swap to GPT/Claude anytime) |
+| **RAG Framework** | LangChain | ≥ 0.2 | Document loading, splitting, retrieval pipeline |
+| **Vector Store** | **FAISS** (CPU) | ≥ 1.7 | Local vector similarity search (no cloud infra) |
+| **Embeddings** | sentence-transformers | ≥ 2.2 | Multilingual text vectorization (384-dim) |
 | **Charting** | matplotlib | ≥ 3.7 | 4 types of analysis charts (150dpi PNG) |
-| **PPT Generation** | python-pptx | ≥ 0.6 | 9-slide professional deck |
+| **PPT Generation** | python-pptx | ≥ 0.6 | 9-slide professional deck with embedded charts |
 | **Database** | SQLite | — | Report history persistence |
-| **Config** | pydantic-settings | ≥ 2.0 | Type-safe environment config |
+| **Config** | pydantic-settings | ≥ 2.0 | Type-safe environment configuration |
 | **Tool Agent** | Custom MultiToolAgent | — | LangChain Tool Calling orchestration |
-| **Workflow** | Custom Pipeline | — | 8-step sequential pipeline |
+| **Workflow** | Custom Pipeline | — | 8-step sequential pipeline with error isolation |
 
 ---
 
@@ -494,94 +517,62 @@ AgentContext (Shared Data Bus)
 ```
 AI-Customer-Success-Copilot/
 │
-├── 🚀 app.py                          # Streamlit application entry point
-├── 🧪 pyproject.toml                  # Project metadata & build config
-├── 📦 requirements.txt                # Python dependencies
-├── ⚙️ .env.example                    # Environment variable template
+├── 🚀 app.py                              # Streamlit application entry point
+├── 📦 requirements.txt                    # Python dependencies
+├── ⚙️ .env.example                        # Environment variable template
 ├── 📄 .gitignore
 │
-├── 📊 data/                           # Customer data layer
-│   ├── sample_customer_data.csv       # Sample dataset (35 customers, 10 columns)
-│   └── customer_behavior_rules.md     # Risk classification rule documentation
+├── 🧠 src/ai_cs_copilot/                 # Core business logic package
+│   ├── config.py                          # pydantic-settings configuration
+│   ├── db/                                # SQLite data access layer
+│   ├── pipelines/                         # Data processing pipelines
+│   │   ├── customer_analytics.py         # ⭐ Risk scoring engine
+│   │   └── data_paths.py                # CSV path resolution
+│   ├── services/                          # Service layer
+│   │   ├── llm_service.py               # DeepSeek LLM wrapper
+│   │   └── rag_service.py               # ⭐ LangChain + FAISS RAG
+│   └── llm/                              # Backward-compat exports
 │
-├── 🧠 src/ai_cs_copilot/             # Core business logic package
-│   ├── __init__.py
-│   ├── config.py                      # pydantic-settings configuration
-│   ├── db/                            # SQLite data access layer
-│   │   ├── __init__.py
-│   │   └── sqlite_store.py           # Report persistence
-│   ├── pipelines/                     # Data processing pipelines
-│   │   ├── __init__.py
-│   │   ├── customer_analytics.py     # Risk scoring engine + data loading
-│   │   └── data_paths.py            # CSV path resolution
-│   ├── services/                      # Service layer
-│   │   ├── __init__.py
-│   │   ├── llm_service.py           # DeepSeek LLM wrapper
-│   │   └── rag_service.py           # LangChain + FAISS RAG service
-│   └── llm/                          # Backward-compat LLM exports
-│       └── __init__.py
+├── 🤖 agents/                             # AI Agent layer
+│   └── customer_risk_agent.py            # ⭐ DeepSeek risk analysis agent
 │
-├── 🤖 agents/                         # AI Agent layer
-│   ├── __init__.py
-│   └── customer_risk_agent.py        # DeepSeek-powered risk analysis agent
+├── 🧩 tools/                              # ⭐ Multi-Tool Agent system
+│   ├── base_tool.py                       # Abstract BaseTool + ToolSpec
+│   ├── data_analysis_tool.py             # Risk scoring & classification
+│   ├── rag_query_tool.py                 # RAG knowledge retrieval
+│   ├── chart_tool.py                     # matplotlib chart generation
+│   ├── report_tool.py                    # Markdown report generation
+│   ├── ppt_tool.py                       # PPT generation
+│   └── agent.py                          # ⭐ MultiToolAgent orchestrator
 │
-├── 🧩 tools/                          # Multi-Tool Agent system
-│   ├── __init__.py
-│   ├── base_tool.py                   # Abstract BaseTool class
-│   ├── data_analysis_tool.py         # Risk scoring & customer classification
-│   ├── rag_query_tool.py             # RAG knowledge base query
-│   ├── chart_tool.py                 # matplotlib chart generation
-│   ├── report_tool.py                # Markdown report generation
-│   ├── ppt_tool.py                   # PPT generation
-│   └── agent.py                      # MultiToolAgent orchestrator
+├── 🔄 workflows/                          # Workflow orchestration
+│   └── report_workflow.py                # ⭐ 8-step Pipeline workflow
 │
-├── 🔄 workflows/                      # Workflow orchestration
-│   ├── __init__.py
-│   └── report_workflow.py            # 8-step Pipeline workflow
+├── 📚 knowledge_base/                     # ⭐ RAG knowledge documents
+│   ├── low_login_solutions.md
+│   ├── customer_retention.md
+│   ├── renewal_strategy.md
+│   └── marketing_growth.md
 │
-├── 📚 knowledge_base/                 # RAG knowledge base documents
-│   ├── low_login_solutions.md        # Low login activity solutions
-│   ├── customer_retention.md         # Customer retention strategies
-│   ├── renewal_strategy.md           # Renewal & churn prevention
-│   └── marketing_growth.md          # Marketing adoption growth
+├── 📋 services/                           # Report/PPT generation
+│   ├── report_generator.py               # Markdown enterprise report
+│   └── ppt_generator.py                  # python-pptx PPT generator
 │
-├── 📋 services/                       # Report/PPT generation services
-│   ├── __init__.py
-│   ├── report_generator.py           # Markdown enterprise report generator
-│   └── ppt_generator.py             # python-pptx PPT generator
+├── 📊 visualizations/                     # Chart output
+│   └── chart_generator.py                # matplotlib chart engine
 │
-├── 📊 visualizations/                 # Chart output directory
-│   ├── chart_generator.py            # matplotlib chart engine
-│   ├── gmv_bar.png                   # GMV ranking bar chart
-│   ├── risk_pie.png                  # Risk distribution pie chart
-│   ├── industry_bar.png              # Industry distribution
-│   └── region_bar.png                # Regional distribution
+├── 📁 reports/                            # Generated report outputs
+├── 🎨 templates/                          # Report templates
+├── 🗃️ storage/                            # Data persistence
+│   ├── copilot.db                         # SQLite report history
+│   └── faiss_index/                       # FAISS vector store
 │
-├── 📁 reports/                        # Generated report outputs
-│   ├── enterprise_report.md          # Latest enterprise report (Markdown)
-│   ├── enterprise_report.pptx        # Latest enterprise report (PPT)
-│   ├── latest_report.md              # Latest LLM-generated report
-│   └── risk_analysis_report.md       # AI risk analysis report
+├── 🧪 tests/                              # Unit tests
 │
-├── 🎨 templates/                      # Report templates
-│   └── report_template.md            # Markdown report template reference
-│
-├── 🗃️ storage/                        # Data persistence
-│   ├── copilot.db                    # SQLite database (report history)
-│   └── faiss_index/                  # FAISS vector store index
-│
-├── 📜 scripts/                        # Utility scripts
-│   └── init_db.py                   # Database initialization script
-│
-├── 🧪 tests/                          # Unit tests
-│
-├── 📚 docs/                           # Architecture documentation
-│   ├── SYSTEM_ARCHITECTURE.md        # System architecture document
-│   ├── RAG_ARCHITECTURE.md           # RAG architecture document
-│   └── MULTI_AGENT_ARCHITECTURE.md   # Multi-Tool Agent architecture
-│
-└── 🔧 .claude/                        # Claude Code config
-    └── settings.local.json
+└── 📚 docs/                               # Architecture documentation
+    ├── SYSTEM_ARCHITECTURE.md             # System architecture
+    ├── RAG_ARCHITECTURE.md                # RAG architecture
+    └── MULTI_AGENT_ARCHITECTURE.md        # Tool Calling architecture
 ```
 
 ---
@@ -620,30 +611,18 @@ source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Step 4: Configure environment variables
+# Step 4: Configure environment
 cp .env.example .env
-# Edit .env with your API key (see Environment Configuration section)
+# Edit .env with your API key (see "Environment Configuration" below)
 
-# Step 5: Initialize the SQLite database
+# Step 5: Initialize the database
 python scripts/init_db.py
 
-# Step 6: (Optional) Pre-build the FAISS index
+# Step 6: (Optional) Pre-build FAISS index for faster startup
 python -c "from src.ai_cs_copilot.services.rag_service import RAGService; RAGService()"
 
-# Step 7: Launch the application
+# Step 7: Launch Streamlit
 streamlit run app.py
-```
-
-### Docker (Coming Soon)
-
-```dockerfile
-# Future: Docker support
-FROM python:3.11-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-CMD ["streamlit", "run", "app.py", "--server.port=8501"]
 ```
 
 ---
@@ -656,7 +635,7 @@ Create a `.env` file in the project root directory by copying `.env.example`:
 
 ```ini
 # ═══════════════════════════════════════════════
-#  AI Customer Success Copilot - Configuration
+#  AI-Customer-Success-Copilot — Configuration
 # ═══════════════════════════════════════════════
 
 # ── DeepSeek API Configuration ─────────────────
@@ -666,25 +645,23 @@ DEEPSEEK_BASE_URL=https://api.deepseek.com
 DEEPSEEK_MODEL=deepseek-chat
 
 # ── Alternative: OpenAI-Compatible Endpoint ────
-# If using a different provider, configure these:
+# If using a different provider:
 # OPENAI_API_KEY=sk-your-openai-api-key
 # OPENAI_API_BASE=https://api.openai.com/v1
 # OPENAI_MODEL=gpt-4o-mini
 
 # ── Customer Data ──────────────────────────────
-# Path to customer CSV (relative to project root or absolute path)
 CUSTOMER_DATA_CSV=data/sample_customer_data.csv
 
 # ── Debug Mode ────────────────────────────────
-# Set to true for verbose logging (don't use in production)
 DEBUG=false
 ```
 
-### Configuration Parameters
+### Configuration Reference
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `DEEPSEEK_API_KEY` | ✅ Yes | — | DeepSeek API key |
+| `DEEPSEEK_API_KEY` | ✅ Yes | — | DeepSeek API key for LLM access |
 | `DEEPSEEK_BASE_URL` | ❌ No | `https://api.deepseek.com` | API endpoint base URL |
 | `DEEPSEEK_MODEL` | ❌ No | `deepseek-chat` | Model name |
 | `CUSTOMER_DATA_CSV` | ❌ No | `data/sample_customer_data.csv` | Custom CSV data file path |
@@ -697,61 +674,59 @@ DEBUG=false
 ## 🚀 12. Streamlit Quick Start
 
 ```bash
-# Launch the Streamlit app
+# Launch the application
 streamlit run app.py
 
-# Or specify a custom port
+# Custom port
 streamlit run app.py --server.port=8501
 
-# Or run in headless mode (no browser auto-open)
+# Headless mode (no browser auto-open)
 streamlit run app.py --server.headless=true
 ```
 
 ### Web Interface Overview
 
-Once launched, open `http://localhost:8501` in your browser:
-
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│  AI-Customer-Success-Copilot — AI 客户成功助手                                   │
+│  AI-Customer-Success-Copilot — AI 客户成功助手                     │
 ├──────────────────────────────────────────────────────────────────┤
 │                                                                   │
-│  ┌──────────┐  ┌──────────────────────────────────────────────┐  │
-│  │ Sidebar   │  │  Tab 1: 📊 Data Overview                     │  │
-│  │           │  │  ┌──────────────────────────────────────┐   │  │
-│  │ Project   │  │  │ Customer data table with all metrics  │   │  │
-│  │ Info      │  │  │ + Download CSV button                  │   │  │
-│  │           │  │  └──────────────────────────────────────┘   │  │
-│  │ CSV       │  │                                              │  │
-│  │ Upload    │  │  Tab 2: 🚨 Risk Filtering                   │  │
-│  │           │  │  ┌──────────────────────────────────────┐   │  │
-│  │ DeepSeek  │  │  │ Filter by risk level: High/Med/Low   │   │  │
-│  │ Config    │  │  └──────────────────────────────────────┘   │  │
-│  └──────────┘  │                                              │  │
-│                │  Tab 3: 🤖 AI Report Generation              │  │
-│                │  ┌──────────────────────────────────────┐   │  │
-│                │  │ 1. DeepSeek Report (LLM-generated)    │   │  │
-│                │  │ 2. Enterprise Report & PPT            │   │  │
-│                │  │ 3. AI Agent One-Click Generation      │   │  │
-│                │  └──────────────────────────────────────┘   │  │
-│                │                                              │  │
-│                │  Tab 4: 📜 History (SQLite)                 │  │
-│                │  ┌──────────────────────────────────────┐   │  │
-│                │  │ Recent 30 report records              │   │  │
-│                │  └──────────────────────────────────────┘   │  │
-│                └──────────────────────────────────────────────┘  │
+│  ┌────────────┐  ┌────────────────────────────────────────────┐  │
+│  │  Sidebar   │  │  📊 Tab 1: Data Overview                    │  │
+│  │            │  │  ┌──────────────────────────────────────┐   │  │
+│  │ Project    │  │  │ Full customer data table              │   │  │
+│  │ Info       │  │  │ + Download CSV button                 │   │  │
+│  │            │  │  └──────────────────────────────────────┘   │  │
+│  │ CSV        │  │                                              │  │
+│  │ Upload     │  │  🚨 Tab 2: Risk Filtering                   │  │
+│  │            │  │  ┌──────────────────────────────────────┐   │  │
+│  │ DeepSeek   │  │  │ Filter by High / Medium / Low        │   │  │
+│  │ Config     │  │  └──────────────────────────────────────┘   │  │
+│  └────────────┘  │                                              │  │
+│                  │  🤖 Tab 3: AI Report Generation              │  │
+│                  │  ┌──────────────────────────────────────┐   │  │
+│                  │  │ ① DeepSeek AI Report (LLM Insights)   │   │  │
+│                  │  │ ② Enterprise Report & PPT (Manual)   │   │  │
+│                  │  │ ③ ⭐ AI Agent One-Click (Auto)       │   │  │
+│                  │  └──────────────────────────────────────┘   │  │
+│                  │                                              │  │
+│                  │  📜 Tab 4: History (SQLite)                  │  │
+│                  │  ┌──────────────────────────────────────┐   │  │
+│                  │  │ Last 30 report records with timestamps│   │  │
+│                  │  └──────────────────────────────────────┘   │  │
+│                  └──────────────────────────────────────────────┘  │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
 ### How to Use
 
-1. **Data Source**: Either upload your own CSV via sidebar or use the default sample data
-2. **Risk Filtering**: Navigate to "风险客户" tab to filter by risk level
-3. **Generate AI Report**: In "AI 报告生成" tab, click "生成报告" for DeepSeek insights
-4. **Enterprise Report**: Click "生成企业报告 & PPT" for charts + Markdown + PPT
-5. **AI Agent**: Click "AI Agent 一键生成完整报告" for fully automated orchestration
-6. **Download**: Use download buttons to save Markdown report or PPT deck
-7. **History**: Check "历史记录" tab for all previously generated reports
+1. **📤 Load Data**: Upload your CSV via sidebar, or use the default sample dataset
+2. **🔍 Review Risks**: Check "风险客户" tab, filter by risk level
+3. **🤖 Generate AI Report**: In "AI 报告生成" tab, click "生成报告" for DeepSeek insights
+4. **📊 Enterprise Report**: Click "生成企业报告 & PPT" for charts + Markdown + PPT
+5. **⚡ AI Agent**: Click ⭐ "AI Agent 一键生成完整报告" for fully automated orchestration
+6. **📥 Download**: Use built-in download buttons for Markdown and PPT files
+7. **📜 History**: Check "历史记录" tab for all previously generated reports
 
 ---
 
@@ -759,48 +734,55 @@ Once launched, open `http://localhost:8501` in your browser:
 
 ## 🖼️ 13. Demo Screenshots
 
-> *Screenshots will be added after deployment. Below are placeholders for the GitHub README.*
+> *Live screenshots will be added after deployment. Below are placeholder descriptions of the key views.*
 
+### 📊 Data Overview Tab
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  📸 Screenshot 1: Data Overview Tab                              │
-│                                                                   │
-│  ┌─────────────────────────────────────────────────────────┐     │
-│  │  Customer Name │ Industry │ GMV │ Login │ Risk Level    │     │
-│  │──────────────────────────────────────────────────────────│     │
-│  │  GreenField    │ Retail   │ 450K │ 25    │ 🟢 低         │     │
-│  │  BlueOcean     │ Tech     │ 120K │  3    │ 🔴 高         │     │
-│  │  ...           │ ...      │ ...  │ ...   │ ...           │     │
-│  └─────────────────────────────────────────────────────────┘     │
+│  Customer Name  │ Industry  │ GMV     │ Login │ Risk Level     │
+│─────────────────────────────────────────────────────────────────│
+│  GreenField     │ Retail    │ ¥450K   │ 25d   │ 🟢 Low         │
+│  BlueOcean      │ Tech      │ ¥120K   │ 3d    │ 🔴 High        │
+│  RedSun         │ Mfg       │ ¥80K    │ 8d    │ 🟡 Medium      │
+│  ...            │ ...       │ ...     │ ...   │ ...            │
 └─────────────────────────────────────────────────────────────────┘
+```
 
-┌─────────────────────────────────────────────────────────────────┐
-│  📸 Screenshot 2: AI Report Output                              │
-│                                                                   │
-│  ┌─────────────────────────────────────────────────────────┐     │
-│  │  # 企业经营分析报告                                        │     │
-│  │                                                          │     │
-│  │  ## 一、执行摘要                                          │     │
-│  │  本次共分析 35 个客户，覆盖 6 个行业...                    │     │
-│  │                                                          │     │
-│  │  ## 二、客户风险分布                                      │     │
-│  │  [Risk Pie Chart Image]                                  │     │
-│  │                                                          │     │
-│  │  ## 三、高风险客户清单                                    │     │
-│  │  | 客户 | GMV | 投诉 | 建议动作 |                        │     │
-│  └─────────────────────────────────────────────────────────┘     │
-└─────────────────────────────────────────────────────────────────┘
+### 🤖 AI Agent Execution Output
+```
+==================================================
+AI Agent 执行报告
+==================================================
+任务：生成企业经营分析报告
+执行时间：2026-05-12 20:16:28
 
-┌─────────────────────────────────────────────────────────────────┐
-│  📸 Screenshot 3: Enterprise Report Downloads                   │
-│                                                                   │
-│  ┌────────────────────────┐  ┌────────────────────────┐          │
-│  │  📥 Download Markdown   │  │  📥 Download PPT       │          │
-│  │  enterprise_report.md   │  │  enterprise_report.pptx│          │
-│  └────────────────────────┘  └────────────────────────┘          │
-│                                                                   │
-│  [Chart Preview: GMV Bar] [Risk Pie] [Industry] [Region]         │
-└─────────────────────────────────────────────────────────────────┘
+执行步骤：
+  ✓ 数据标注与分类: 工具 data_analysis 执行成功
+  ✓ 知识库检索: 工具 rag_query 执行成功
+  ✓ 图表生成: 工具 chart_generation 执行成功
+  ✓ Markdown 报告生成: 工具 report_generation 执行成功
+  ✓ PPT 生成: 工具 ppt_generation 执行成功
+
+产出物：
+  - 客户分类：高风险 10 个 / 高价值 6 个 / 增长 8 个
+  - RAG 知识库：已检索
+  - 图表：4 张
+  - Markdown 报告：reports/enterprise_report.md
+  - PPT 演示文稿：reports/enterprise_report.pptx
+==================================================
+```
+
+### 📈 Charts & Downloads
+```
+┌────────────────────────┐  ┌────────────────────────┐
+│  📥 Download Markdown   │  │  📥 Download PPT       │
+│  enterprise_report.md   │  │  enterprise_report.pptx│
+└────────────────────────┘  └────────────────────────┘
+
+┌──────┐  ┌──────┐  ┌──────┐  ┌──────┐
+│ GMV  │  │ Risk │  │Indus │  │Region│
+│ Bar  │  │ Pie  │  │ try  │  │ Bar  │
+└──────┘  └──────┘  └──────┘  └──────┘
 ```
 
 ---
@@ -810,67 +792,67 @@ Once launched, open `http://localhost:8501` in your browser:
 ## 🏗️ 14. System Architecture Diagram
 
 ```
-┌═══════════════════════════════════════════════════════════════════════════┐
+╔═══════════════════════════════════════════════════════════════════════════╗
 ║                                                                           ║
-║                AI CUSTOMER SUCCESS COPILOT — SYSTEM ARCHITECTURE           ║
+║            AI-CUSTOMER-SUCCESS-COPILOT — SYSTEM ARCHITECTURE              ║
 ║                                                                           ║
 ╚═══════════════════════════════════════════════════════════════════════════╝
 
-                                ┌──────────────┐
-                                │   End User    │
-                                │   (CSM)       │
-                                └──────┬───────┘
+                                  ┌──────────────┐
+                                  │   End User    │
+                                  │   (CSM)       │
+                                  └──────┬───────┘
+                                         │
+                                  ┌──────▼───────┐
+                                  │  Streamlit   │
+                                  │  Web UI      │
+                                  │  (app.py)    │
+                                  └──────┬───────┘
+                                         │
+            ┌────────────────────────────┼────────────────────────────┐
+            │                            │                            │
+            ▼                            ▼                            ▼
+     ┌──────────────┐           ┌────────────────┐           ┌──────────────┐
+     │   Data       │           │   Report Tab   │           │  Multi-Tool  │
+     │   Processing │           │  (3 Options)    │           │  Agent       │
+     │   Pipeline   │           │                │           │  (tools/)    │
+     │              │           │  ┌──────────┐  │           │              │
+     │ CSV Load     │           │  │ DeepSeek │  │           │ data_analysis│
+     │ Risk Score   │           │  │ Report   │  │           │     ↓        │
+     │ Classify     │           │  ├──────────┤  │           │ rag_query    │
+     │              │           │  │Enterprise│  │           │     ↓        │
+     └──────┬───────┘           │  │ Report   │  │           │ chart_gen    │
+            │                   │  ├──────────┤  │           │     ↓        │
+            │                   │  │ AI Agent │  │           │ report_gen   │
+            │                   │  │ One-Click│  │           │     ↓        │
+            │                   │  └──────────┘  │           │ ppt_gen      │
+            │                   └────────────────┘           └──────┬───────┘
+            │                                                       │
+            └──────────────────────────┬────────────────────────────┘
                                        │
-                                ┌──────▼───────┐
-                                │  Streamlit   │
-                                │  Web UI      │
-                                │  (app.py)    │
-                                └──────┬───────┘
-                                       │
-          ┌────────────────────────────┼────────────────────────────┐
-          │                            │                            │
-          ▼                            ▼                            ▼
-   ┌──────────────┐           ┌────────────────┐           ┌──────────────┐
-   │   Data       │           │   Report Tab   │           │  Multi-Tool  │
-   │   Processing │           │  (3 Options)    │           │  Agent       │
-   │   Pipeline   │           │                │           │  (tools/)    │
-   │              │           │  ┌──────────┐  │           │              │
-   │ CSV Load     │           │  │ DeepSeek │  │           │ data_analysis│
-   │ Risk Score   │           │  │ Report   │  │           │     ↓        │
-   │ Classify     │           │  ├──────────┤  │           │ rag_query    │
-   │              │           │  │Enterprise│  │           │     ↓        │
-   └──────┬───────┘           │  │ Report   │  │           │ chart_gen    │
-          │                   │  ├──────────┤  │           │     ↓        │
-          │                   │  │ AI Agent │  │           │ report_gen   │
-          │                   │  │ One-Click│  │           │     ↓        │
-          │                   │  └──────────┘  │           │ ppt_gen      │
-          │                   └────────────────┘           └──────┬───────┘
-          │                                                       │
-          └──────────────────────────┬────────────────────────────┘
-                                     │
-                    ┌────────────────┼────────────────┐
-                    │                │                │
-                    ▼                ▼                ▼
-           ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
-           │   RAG        │ │   LLM        │ │   Output     │
-           │   Knowledge  │ │   (DeepSeek) │ │   Generation │
-           │   Base       │ │              │ │              │
-           │              │ │ Chat Complet.│ │ Markdown     │
-           │ FAISS Index  │ │ Risk Analysis│ │ PPT (9 slid) │
-           │ Embeddings   │ │ AI Insights  │ │ Charts (4)   │
-           └──────┬───────┘ └──────────────┘ └──────────────┘
-                  │
-         ┌────────┴────────┐
-         ▼                 ▼
-   ┌────────────┐   ┌────────────┐
-   │ Knowledge  │   │ Persisted  │
-   │ Documents  │   │ FAISS      │
-   │ (*.md)     │   │ Index      │
-   └────────────┘   └────────────┘
+                      ┌────────────────┼────────────────┐
+                      │                │                │
+                      ▼                ▼                ▼
+             ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+             │   RAG        │ │   LLM        │ │   Output     │
+             │   Knowledge  │ │   (DeepSeek) │ │   Generation │
+             │   Base       │ │              │ │              │
+             │              │ │ Chat Complet.│ │ Markdown     │
+             │ FAISS Index  │ │ Risk Analysis│ │ PPT (9 slid) │
+             │ Embeddings   │ │ AI Insights  │ │ Charts (4)   │
+             └──────┬───────┘ └──────────────┘ └──────────────┘
+                    │
+           ┌────────┴────────┐
+           ▼                 ▼
+     ┌────────────┐   ┌────────────┐
+     │ Knowledge  │   │ Persisted  │
+     │ Documents  │   │ FAISS      │
+     │ (*.md)     │   │ Index      │
+     └────────────┘   └────────────┘
 
-═════════════════════════════════════════════════════════════════════════════
-  Data Layer                    Logic Layer                       Output Layer
-═════════════════════════════════════════════════════════════════════════════
+═══════════════════════════════════════════════════════════════════════════════
+  Data Layer                      Logic Layer                       Output Layer
+═══════════════════════════════════════════════════════════════════════════════
 ```
 
 ---
@@ -880,7 +862,7 @@ Once launched, open `http://localhost:8501` in your browser:
 ## 🔄 15. Workflow Flowchart
 
 ```
-═══ DATA INGESTION ══════════════════════════════════════════════════════════
+═══ DATA INGESTION ════════════════════════════════════════════════════════════
 
     ┌──────────────────┐
     │  CSV File        │
@@ -893,10 +875,10 @@ Once launched, open `http://localhost:8501` in your browser:
     │  (utf-8-sig)     │     │  Validate Schema │
     └──────────────────┘     └────────┬─────────┘
                                       │
-═══ RISK SCORING ═════════════════════╪══════════════════════════════════════
+═══ RISK SCORING ═════════════════════╪════════════════════════════════════════
                                       │
              ┌────────────────────────▼────────────────────────┐
-             │             Rule-Based Risk Scoring Engine       │
+             │             Rule-Based Risk Scoring              │
              │                                                  │
              │  login_days < 10   → (10 - days) × 1.5          │
              │  ticket_rate < 40  → (40 - rate) × 0.3          │
@@ -909,43 +891,43 @@ Once launched, open `http://localhost:8501` in your browser:
              │  score ≥ 25  → HIGH (🔴)                         │
              └──────────────────────┬───────────────────────────┘
                                     │
-═══ KNOWLEDGE RETRIEVAL ═══════════╪══════════════════════════════════════
+═══ KNOWLEDGE RETRIEVAL ═══════════╪══════════════════════════════════════════
                                     │
              ┌──────────────────────▼───────────────────────────┐
              │           RAG Knowledge Retrieval                │
              │                                                  │
              │  Detect Issues → Build Queries → FAISS Search    │
-             │     ↓                    ↓              ↓        │
-             │  Low Login          "登录天数低..."    Similarity │
-             │  High Complaints    "客户投诉..."     Search k=2 │
-             │  Renewal Overdue    "续约逾期..."                 │
-             │  Low Adoption       "功能使用率低..."              │
+             │       ↓                   ↓              ↓       │
+             │  Low Login         "登录天数低..."    Similarity  │
+             │  High Complaints   "客户投诉..."     Search k=2  │
+             │  Renewal Overdue   "续约逾期..."                  │
+             │  Low Adoption      "功能使用率低..."               │
              └──────────────────────┬───────────────────────────┘
                                     │
-═══ REPORT GENERATION ═════════════╪══════════════════════════════════════
+═══ REPORT GENERATION ═════════════╪══════════════════════════════════════════
                                     │
              ┌──────────────────────▼───────────────────────────┐
              │          Multi-Format Report Generation          │
              │                                                  │
-             │  ┌────────────────┐  ┌────────────────┐         │
-             │  │  Charts (4)    │  │  AI Insights    │         │
-             │  │  ──────────    │  │  ──────────     │         │
-             │  │  • GMV Bar     │  │  DeepSeek LLM   │         │
-             │  │  • Risk Pie    │  │  Analysis +     │         │
-             │  │  • Industry    │  │  RAG Context    │         │
-             │  │  • Region      │  │                 │         │
-             │  └────────────────┘  └────────────────┘         │
+             │     ┌────────────────┐  ┌────────────────┐      │
+             │     │  Charts (4)    │  │  AI Insights    │      │
+             │     │  ──────────    │  │  ──────────     │      │
+             │     │  • GMV Bar     │  │  DeepSeek LLM   │      │
+             │     │  • Risk Pie    │  │  Analysis +     │      │
+             │     │  • Industry    │  │  RAG Context    │      │
+             │     │  • Region      │  │                 │      │
+             │     └────────────────┘  └────────────────┘      │
              │                                                  │
-             │         ▼                        ▼               │
-             │  ┌────────────────┐  ┌────────────────┐         │
-             │  │  Markdown      │  │  PPT (9 slides) │         │
-             │  │  8-Section     │  │  Professional   │         │
-             │  │  Enterprise    │  │  Management     │         │
-             │  │  Report        │  │  Presentation   │         │
-             │  └────────────────┘  └────────────────┘         │
+             │           ▼                      ▼               │
+             │     ┌────────────────┐  ┌────────────────┐      │
+             │     │  Markdown      │  │  PPT (9 slides) │      │
+             │     │  8-Section     │  │  Professional   │      │
+             │     │  Enterprise    │  │  Management     │      │
+             │     │  Report        │  │  Presentation   │      │
+             │     └────────────────┘  └────────────────┘      │
              └──────────────────────────────────────────────────┘
 
-═══ OUTPUT ═════════════════════════════════════════════════════════════════
+═══ OUTPUT ═══════════════════════════════════════════════════════════════════
 
     📄 enterprise_report.md      📽️ enterprise_report.pptx      📊 Chart PNGs
 ```
@@ -958,18 +940,27 @@ Once launched, open `http://localhost:8501` in your browser:
 
 ### 🧩 True Agentic Architecture
 
-Unlike simple "LLM wrappers," this project implements a **complete Agentic system** with tool registration, context passing, error isolation, and extensible pipeline design. The Multi-Tool Agent follows LangChain's Tool Calling paradigm.
+Unlike simple "LLM wrappers," this project implements a **complete Agentic system** with tool registration, context passing, error isolation, and extensible pipeline design. The Multi-Tool Agent follows **LangChain's Tool Calling** paradigm — each tool has `name`, `description`, `parameters`, and is independently registerable.
 
 ### 🔀 Dual-Track "Rule + AI" Design
 
-Deterministic rule engine handles what it's good at (scoring, classification, formatting) while AI handles what it's good at (insights, strategies, natural language). They cross-validate each other — rules catch AI hallucination, AI adds context rules miss.
+Deterministic rule engine handles what it's good at (scoring, classification, formatting) while AI handles what it's good at (insights, strategies, natural language). They **cross-validate each other** — rules catch AI hallucination, AI adds context rules miss.
 
 ### 📦 Production-Grade Code Organization
 
-- **Separation of concerns**: `tools/` (Agent & Tools) vs `services/` (Report/PPT) vs `workflows/` (Pipeline) vs `agents/` (Risk AI) vs `src/` (Core)
-- **Enterprise patterns**: Pipeline, Orchestrator, Repository, Factory
-- **Type safety**: Full type hints, pydantic-settings, dataclasses
-- **Error resilience**: Critical/non-critical step isolation, graceful degradation
+```
+Separation of concerns:
+  tools/        → Agent & Tools (Tool Calling)
+  agents/       → AI Risk Analysis Agent
+  workflows/    → Pipeline orchestration
+  services/     → Report/PPT generation
+  src/          → Core business logic
+  knowledge_base/ → RAG documents
+
+Enterprise patterns: Pipeline, Orchestrator, Repository, Factory
+Type safety: Full type hints, pydantic-settings, dataclasses
+Error resilience: Critical/non-critical step isolation, graceful degradation
+```
 
 ### 🧠 Local RAG with Zero External Dependencies
 
@@ -977,11 +968,11 @@ The entire RAG pipeline runs **locally** — no external vector database, no clo
 
 ### 🎯 CSM-Domain Specific
 
-Built specifically for B2B SaaS Customer Success use cases, not generic chatbot. The risk scoring engine, knowledge base topics, report structure, and PPT slides are all designed with CSM workflows in mind.
+Built specifically for B2B SaaS Customer Success use cases, not a generic chatbot. The risk scoring engine, knowledge base topics, report structure, and PPT slides are all designed with **real CSM workflows** in mind.
 
 ### 📊 Multi-Format Output
 
-One analysis pipeline produces **4 output formats**: raw DataFrame, structured Markdown report, professional PPT deck, and 4 types of data visualization charts — all from a single user click.
+One analysis pipeline produces **4 output formats**: raw DataFrame, structured Markdown report, professional PPT deck, and 4 types of data visualization charts — all from a single click.
 
 ---
 
@@ -989,59 +980,64 @@ One analysis pipeline produces **4 output formats**: raw DataFrame, structured M
 
 ## 🏭 17. Enterprise Use Cases
 
-### Use Case 1: Weekly Customer Health Review
+### 🏢 Use Case 1: Weekly Customer Health Review
 
-```mermaid
+```
 Scenario: CSM reviews 50+ customer accounts every Monday
-┌─────────────────────────────────────────────────────────────────────┐
-│ 1. CSM opens the dashboard                                         │
-│ 2. Uploads latest customer data CSV                                 │
-│ 3. Clicks "AI Agent 一键生成完整报告"                                  │
-│ 4. Agent runs: Scoring → RAG → Charts → MD Report → PPT            │
-│ 5. CSM gets:                                                       │
-│    ✓ Risk-prioritized customer list                                 │
-│    ✓ AI-generated insights & action items                           │
-│    ✓ PPT ready for weekly team meeting                              │
-│ 6. Time saved: 4 hours → 30 seconds                                 │
-└─────────────────────────────────────────────────────────────────────┘
+
+  Before AI Copilot:
+    1. Pull data from CRM (30 min)
+    2. Calculate risk scores manually (60 min)
+    3. Search for best practices (30 min)
+    4. Create charts in Excel (30 min)
+    5. Write report in Word (60 min)
+    6. Build PPT for team meeting (60 min)
+    → Total: ~4.5 hours
+
+  After AI Copilot:
+    1. Upload latest CSV (1 min)
+    2. Click "AI Agent 一键生成" (30 sec)
+    3. Review AI-generated insights (10 min)
+    4. Present PPT to team (0 min prep)
+    → Total: ~11 minutes
 ```
 
-### Use Case 2: Quarterly Business Review (QBR) Preparation
+### 🏢 Use Case 2: Quarterly Business Review (QBR)
 
-```markdown
-Traditional: CSM spends 2-3 days pulling data, making charts, writing reports
-AI Copilot: Upload data → Click → 30 seconds → Full QBR package ready
+```
+  Traditional: CSM spends 2-3 days pulling data, making charts, writing reports
+  AI Copilot:  Upload data → Click → 30 seconds → Full QBR package ready
 ```
 
-### Use Case 3: New CSM Onboarding
+### 🏢 Use Case 3: New CSM Onboarding
 
-```markdown
-New CSMs get access to:
-- Institutional knowledge via RAG (not just "ask your buddy")
-- Standardized risk assessment methodology
-- Auto-generated reports they can learn from
-- Reduces ramp time from 3 months to ~1 month
+```
+  New CSMs get access to:
+  - Institutional knowledge via RAG (not just "ask your buddy")
+  - Standardized risk assessment methodology
+  - Auto-generated reports they can learn from
+  - Reduces ramp time from 3 months to ~1 month
 ```
 
-### Use Case 4: Executive Dashboard
+### 🏢 Use Case 4: Executive Dashboard
 
-```markdown
-VP of Customer Success gets:
-- Automated portfolio health summary
-- Risk trend analysis
-- Data-driven resource allocation recommendations
-- Consistent reporting across all CSMs
+```
+  VP of Customer Success gets:
+  - Automated portfolio health summary
+  - Risk trend analysis across all CSMs
+  - Data-driven resource allocation recommendations
+  - Consistent reporting standards
 ```
 
 ### Target Audience
 
-| Role | Value |
-|------|-------|
-| **Customer Success Manager** | Automated reporting, risk prioritization, AI-suggested actions |
-| **CS Team Lead / Director** | Portfolio-wide risk visibility, consistent reporting standards |
-| **VP of Customer Success** | Data-driven decision support, scalable CS operations |
-| **SaaS Founder / CTO** | Demo-ready AI + analytics engineering showcase |
-| **AI Engineer** | Reference architecture for Tool Calling + RAG + Workflow |
+| Role | Value Proposition |
+|------|------------------|
+| **👤 Customer Success Manager** | Automated reporting, risk prioritization, AI-suggested actions |
+| **👤 CS Team Lead / Director** | Portfolio-wide risk visibility, consistent reporting standards |
+| **👤 VP of Customer Success** | Data-driven decision support, scalable CS operations |
+| **👤 SaaS Founder / CTO** | Demo-ready AI + analytics engineering showcase |
+| **👤 AI Engineer** | Reference architecture for Tool Calling + RAG + Workflow |
 
 ---
 
@@ -1049,27 +1045,30 @@ VP of Customer Success gets:
 
 ## 🔭 18. Future Roadmap
 
-### Short Term (Next)
+### 🎯 Short Term (Next)
 
-- [ ] **LLM Tool Planning**: Enable dynamic tool selection via DeepSeek LLM analysis
-- [ ] **Email Report Delivery**: Auto-send generated reports via email
-- [ ] **PDF Export**: Add WeasyPrint or ReportLab PDF generation
-- [ ] **CRM Integration**: HubSpot/Salesforce data sync via API
+- [x] **Multi-Tool AI Agent** — LangChain Tool Calling orchestration
+- [x] **RAG Knowledge Base** — FAISS-powered enterprise knowledge retrieval
+- [x] **Enterprise Reporting** — Markdown report + PPT deck + Charts
+- [ ] **LLM Tool Planning** — Dynamic tool selection via DeepSeek LLM analysis
+- [ ] **Email Delivery** — Auto-send generated reports to stakeholders
+- [ ] **PDF Export** — WeasyPrint/ReportLab PDF generation
+- [ ] **CRM Integration** — HubSpot/Salesforce data sync
 
-### Medium Term (Next Quarter)
+### 🎯 Medium Term (Next Quarter)
 
-- [ ] **Churn Prediction ML Model**: Add LightGBM/XGBoost predictive model alongside rule engine
-- [ ] **Multi-Tenant Support**: Organization-level data isolation
-- [ ] **Scheduled Reports**: Cron-based auto-reporting with email delivery
-- [ ] **Interactive Charts**: Upgrade from matplotlib PNG to Plotly interactive
+- [ ] **Churn Prediction ML** — LightGBM/XGBoost predictive model alongside rule engine
+- [ ] **Multi-Tenant** — Organization-level data isolation
+- [ ] **Scheduled Reports** — Cron-based auto-reporting with email
+- [ ] **Interactive Charts** — Upgrade matplotlib PNG → Plotly interactive
 
-### Long Term (Next Half)
+### 🎯 Long Term (Next Half)
 
-- [ ] **Real-Time Dashboard**: WebSocket-based live customer health monitoring
-- [ ] **Multi-LLM Support**: Plug-and-play switching between GPT-4o, Claude, DeepSeek, local models
-- [ ] **REST API**: Expose report generation as RESTful API for external integration
-- [ ] **RBAC**: Role-based access control for enterprise deployment
-- [ ] **Docker Deployment**: Containerized deployment with docker-compose
+- [ ] **Real-Time Dashboard** — WebSocket-based live customer health monitoring
+- [ ] **Multi-LLM Support** — Plug-and-play switching between GPT-4o, Claude, DeepSeek, local models
+- [ ] **REST API** — Expose report generation as RESTful API
+- [ ] **RBAC** — Role-based access control for enterprise deployment
+- [ ] **Docker Deployment** — Containerized deployment with docker-compose
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -1101,7 +1100,7 @@ VP of Customer Success gets:
 
 ### License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License**.
 
 ```
 MIT License
@@ -1114,20 +1113,23 @@ of this software and associated documentation files...
 
 ### Acknowledgments
 
-- [DeepSeek](https://deepseek.com) for their powerful and cost-effective LLM API
-- [LangChain](https://langchain.com) for the RAG framework and Tool Calling inspiration
-- [Streamlit](https://streamlit.io) for the rapid UI development framework
-- [FAISS](https://github.com/facebookresearch/faiss) for the vector search library
+- [DeepSeek](https://deepseek.com) — Powerful and cost-effective LLM API
+- [LangChain](https://langchain.com) — RAG framework and Tool Calling inspiration
+- [Streamlit](https://streamlit.io) — Rapid UI development framework
+- [FAISS](https://github.com/facebookresearch/faiss) — Vector search library
+- [python-pptx](https://python-pptx.readthedocs.io/) — PPT generation
 
 ---
 
+<br>
+
 <p align="center">
   <b>Built with ❤️ for Customer Success Teams Everywhere</b><br>
-  <i>AI Customer Success Copilot — Turning Data into Retention</i>
+  <i>AI-Customer-Success-Copilot — Turning Data into Retention</i>
 </p>
 
 <p align="center">
-  <a href="#-table-of-contents">Back to Top</a> •
-  <a href="https://github.com/Rileymisha/AI-Customer-Success-Copilot/issues">Report Bug</a> •
-  <a href="https://github.com/Rileymisha/AI-Customer-Success-Copilot/discussions">Discussion</a>
+  <a href="#-table-of-contents">⬆ Back to Top</a> •
+  <a href="https://github.com/Rileymisha/AI-Customer-Success-Copilot/issues">🐛 Report Bug</a> •
+  <a href="https://github.com/Rileymisha/AI-Customer-Success-Copilot/discussions">💬 Discussion</a>
 </p>
