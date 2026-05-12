@@ -1,0 +1,16 @@
+README.md
+pyproject.toml
+src/ai_cs_copilot/__init__.py
+src/ai_cs_copilot/config.py
+src/ai_cs_copilot.egg-info/PKG-INFO
+src/ai_cs_copilot.egg-info/SOURCES.txt
+src/ai_cs_copilot.egg-info/dependency_links.txt
+src/ai_cs_copilot.egg-info/requires.txt
+src/ai_cs_copilot.egg-info/top_level.txt
+src/ai_cs_copilot/db/__init__.py
+src/ai_cs_copilot/db/sqlite_store.py
+src/ai_cs_copilot/llm/__init__.py
+src/ai_cs_copilot/llm/advisor.py
+src/ai_cs_copilot/pipelines/__init__.py
+src/ai_cs_copilot/pipelines/customer_analytics.py
+tests/test_customer_analytics.py

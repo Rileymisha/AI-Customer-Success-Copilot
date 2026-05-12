@@ -1,0 +1,112 @@
+Metadata-Version: 2.4
+Name: ai-cs-copilot
+Version: 0.1.0
+Summary: AI 客户成功助手：经营数据分析、风险识别与报告生成
+Author: AI_CS_Copilot Team
+License: Proprietary
+Keywords: customer-success,ai,langchain,streamlit
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: ruff>=0.1; extra == "dev"
+
+# AI_CS_Copilot
+
+企业级「AI 客户成功助手」示例工程：用 **Python + Pandas + LangChain + Streamlit + SQLite** 完成客户经营数据分析、风险标注、大模型经营建议与报告草案生成。
+
+## 功能概览
+
+- 从 CSV 加载模拟客户经营指标，使用规则引擎计算 **风险分数与等级**（教学用简化模型）。
+- 在 Streamlit 中 **总览数据、筛选风险客户**。
+- 通过 **OpenAI 兼容接口** 调用大模型，生成中文 **经营分析报告**。
+- 将生成记录写入 **SQLite**，并在 `reports/` 下保存最新 Markdown 草案。
+
+## 目录结构
+
+```text
+AI_CS_Copilot/
+├── app.py                      # Streamlit 应用入口
+├── pyproject.toml              # Python 项目元数据（包名、版本等）
+├── requirements.txt            # 依赖锁定（主版本区间）
+├── .env.example                # 环境变量模板（复制为 .env）
+├── README.md
+├── data/
+│   └── sample_customer_data.csv
+├── src/ai_cs_copilot/          # 核心业务包
+│   ├── config.py               # dotenv + 配置聚合
+│   ├── db/                     # SQLite 访问层
+│   ├── pipelines/              # Pandas 数据分析流水线
+│   └── llm/                    # LangChain 大模型调用
+├── scripts/
+│   └── init_db.py              # 初始化本地数据库
+├── storage/                    # 本地 SQLite（不入库敏感信息）
+└── tests/                      # 单元测试
+```
+
+## 快速开始
+
+### 1. 创建虚拟环境（推荐）
+
+```bash
+python -m venv .venv
+```
+
+**Windows（PowerShell）**
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+**macOS / Linux**
+
+```bash
+source .venv/bin/activate
+```
+
+### 2. 安装依赖
+
+```bash
+python -m pip install -U pip
+python -m pip install -r requirements.txt
+```
+
+可选：以可编辑模式安装本地包（便于在其他脚本中 `import ai_cs_copilot`）：
+
+```bash
+python -m pip install -e .
+```
+
+### 3. 配置环境变量
+
+将 `.env.example` 复制为 `.env`，填写 `OPENAI_API_KEY`。若使用自建或第三方 **OpenAI 兼容网关**，同时修改 `OPENAI_API_BASE` 与 `OPENAI_MODEL`。
+
+### 4. 初始化数据库（可选）
+
+```bash
+python scripts/init_db.py
+```
+
+### 5. 启动应用
+
+```bash
+streamlit run app.py
+```
+
+浏览器访问终端提示的本地地址即可。
+
+## 运行测试
+
+```bash
+pytest tests
+```
+
+## 技术说明与扩展建议
+
+- **风险模型**：`src/ai_cs_copilot/pipelines/customer_analytics.py` 中的规则仅为演示，生产环境应结合业务标签、模型预测与合规流程。
+- **密钥安全**：切勿将 `.env` 提交到版本库；CI/CD 使用密钥管理服务注入环境变量。
+- **报告形态**：当前将完整报告写入 `reports/latest_report.md`；可扩展为 PDF/HTML、邮件推送或工单系统对接。
+
+## 许可证
+
+示例项目默认 **Proprietary**（见 `pyproject.toml`），可按贵司策略修改。

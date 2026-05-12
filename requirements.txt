@@ -1,0 +1,19 @@
+# AI-Customer-Success-Copilot dependencies
+# Install: python -m pip install -r requirements.txt
+#
+# DeepSeek uses the official OpenAI-compatible Python SDK (`openai` below).
+
+streamlit>=1.28.0,<2
+pandas>=2.0.0,<3
+langchain>=0.2.0,<0.4
+langchain-openai>=0.1.0,<0.4
+langchain-community>=0.2.0,<0.4
+langchain-text-splitters>=0.2.0,<0.4
+openai>=1.40.0,<2
+faiss-cpu>=1.7.4,<2
+sentence-transformers>=2.2.0,<4
+python-pptx>=0.6.21,<2
+matplotlib>=3.7.0,<4
+python-dotenv>=1.0.0,<2
+pydantic>=2.0.0,<3
+pydantic-settings>=2.0.0,<3
