@@ -445,11 +445,12 @@ AgentContext (Shared Data Bus — single source of truth)
 └────────────────────────────────────────────────────────────────┘
 ```
 
-### 5 Registered Tools
+### 6 Registered Tools
 
 | Tool | Name | Dependencies | Critical | Output |
 |------|------|-------------|----------|--------|
 | 🏷️ **Data Analysis** | `data_analysis` | None | ✅ Yes | `df_annotated`, `categories` |
+| 🧠 **AI Insight** | `insight_generation` | DeepSeek API | ❌ No | `insights` text (Markdown) |
 | 🔍 **RAG Query** | `rag_query` | langchain, FAISS | ❌ No | `rag_context` string |
 | 📈 **Chart Generation** | `chart_generation` | matplotlib | ❌ No | `chart_paths` dict (4 PNGs) |
 | 📝 **Markdown Report** | `report_generation` | None | ❌ No | `markdown_path` |

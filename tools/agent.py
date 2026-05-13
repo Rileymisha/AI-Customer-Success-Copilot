@@ -112,6 +112,7 @@ class AgentResult:
 # 关键步骤失败 → 终止整个流程；非关键步骤失败 → 跳过继续
 _DEFAULT_PIPELINE: List[tuple] = [
     ("数据标注与分类", "data_analysis", True),
+    ("AI 经营洞察生成", "insight_generation", False),
     ("知识库检索", "rag_query", False),
     ("图表生成", "chart_generation", False),
     ("Markdown 报告生成", "report_generation", False),
@@ -171,12 +172,14 @@ class MultiToolAgent:
             llm.bind_tools(tools)
         """
         from tools.data_analysis_tool import DataAnalysisTool
+        from tools.insight_tool import InsightGenerationTool
         from tools.rag_query_tool import RAGQueryTool
         from tools.chart_tool import ChartTool
         from tools.report_tool import ReportTool
         from tools.ppt_tool import PPTTool
 
         self.register_tool(DataAnalysisTool())
+        self.register_tool(InsightGenerationTool())
         self.register_tool(RAGQueryTool())
         self.register_tool(ChartTool())
         self.register_tool(ReportTool())
@@ -383,6 +386,15 @@ class MultiToolAgent:
             context.categories = result.get("categories")
             if not context.insights:
                 context.insights = result.get("context_text", "")
+            return result
+
+        elif tool_name == "insight_generation":
+            df = context.df_annotated if context.df_annotated is not None else context.df
+            result = tool.run(df=df, categories=context.categories or {})
+            # 仅当 LLM 返回了非占位符内容时才覆盖 insights
+            ai_insights = result.get("insights", "")
+            if ai_insights and not ai_insights.startswith("（AI 洞察"):
+                context.insights = ai_insights
             return result
 
         elif tool_name == "rag_query":

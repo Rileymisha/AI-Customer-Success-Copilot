@@ -3,11 +3,12 @@
 多工具 AI 智能体（Multi-Tool AI Agent）工具包
 ============================================
 
-本包提供了 5 个独立的企业报告生成工具 + 1 个智能编排 Agent，
+本包提供了 6 个独立的企业报告生成工具 + 1 个智能编排 Agent，
 基于 LangChain Tool Calling 思想设计。
 
 工具列表:
 - DataAnalysisTool: 客户数据分析与风险标注
+- InsightGenerationTool: AI 经营洞察生成（DeepSeek）
 - RAGQueryTool: 知识库检索（RAG）
 - ChartTool: 图表生成（matplotlib PNG）
 - ReportTool: Markdown 报告生成
@@ -28,6 +29,7 @@
 
 from tools.base_tool import BaseTool, ToolError, ToolParameter, ToolSpec
 from tools.data_analysis_tool import DataAnalysisTool
+from tools.insight_tool import InsightGenerationTool
 from tools.rag_query_tool import RAGQueryTool
 from tools.chart_tool import ChartTool
 from tools.report_tool import ReportTool
@@ -42,6 +44,7 @@ __all__ = [
     "ToolSpec",
     # 工具
     "DataAnalysisTool",
+    "InsightGenerationTool",
     "RAGQueryTool",
     "ChartTool",
     "ReportTool",
