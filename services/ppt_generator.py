@@ -92,6 +92,9 @@ class PPTGenerator:
         output_path = Path(output_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
+        # 页码计数器（从 0 开始，_page_number 先 ++ 再显示）
+        self._page_num = 0
+
         total = len(df)
         high_risk = categories.get("high_risk", [])
         high_value = categories.get("high_value", [])
@@ -171,12 +174,13 @@ class PPTGenerator:
         line.fill.fore_color.rgb = _C_LIGHT_GRAY
         line.line.fill.background()
 
-    def _page_number(self, slide: Any, num: int) -> None:
-        """右下角页码。"""
+    def _page_number(self, slide: Any) -> None:
+        """右下角页码（自动递增）。"""
+        self._page_num += 1
         tb = slide.shapes.add_textbox(Inches(12.0), Inches(7.05), Inches(0.8), Inches(0.3))
         tf = tb.text_frame
         p = tf.paragraphs[0]
-        p.text = str(num)
+        p.text = str(self._page_num)
         p.font.size = Pt(9)
         p.font.color.rgb = _C_GRAY_TEXT
         p.alignment = PP_ALIGN.RIGHT
@@ -475,7 +479,7 @@ class PPTGenerator:
         self._body_box(slide, 7.0, 3.0, 5.5, 3.5, insight_text, font_size=14)
 
         self._footer_line(slide)
-        self._page_number(slide, 2)
+        self._page_number(slide)
 
     # ---- 4. 风险总览 ----
 
@@ -531,7 +535,7 @@ class PPTGenerator:
             p2.font.color.rgb = _C_GRAY_TEXT
 
         self._footer_line(slide)
-        self._page_number(slide, 3)
+        self._page_number(slide)
 
     # ---- 5. 高风险客户详情 ----
 
@@ -620,7 +624,7 @@ class PPTGenerator:
                 p.font.bold = True
 
         self._footer_line(slide)
-        self._page_number(slide, 4)
+        self._page_number(slide)
 
     # ---- 6. 高价值客户 ----
 
@@ -703,7 +707,7 @@ class PPTGenerator:
         p_n.font.size = Pt(11)
         p_n.font.color.rgb = _C_GREEN
 
-        self._page_number(slide, 5)
+        self._page_number(slide)
 
     # ---- 7. 图表网格 ----
 
@@ -725,44 +729,113 @@ class PPTGenerator:
                     path, Inches(left), Inches(top), Inches(width), Inches(height),
                 )
 
-        self._page_number(slide, 6)
+        self._page_number(slide)
 
-    # ---- 8. AI 经营洞察 ----
+    # ---- 8. AI 经营洞察（多页，自动按 ## 章节拆分） ----
 
-    def _add_ai_insights(self, insights: str) -> None:
-        """AI 经营洞察页（引用样式）。"""
-        slide = self._new_slide()
-        self._page_bg(slide, _C_OFF_WHITE)
-        self._title_bar(slide, "AI 经营洞察", "DeepSeek AI-Powered Analysis")
+    def _add_ai_insights(self, insights: str) -> int:
+        """
+        将 AI 洞察按章节拆分到多页幻灯片。
 
-        # 左侧引用竖线 + AI 标识
-        quote_bar = slide.shapes.add_shape(
-            MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(1.5), Inches(0.06), Inches(5.0),
-        )
-        quote_bar.fill.solid()
-        quote_bar.fill.fore_color.rgb = _C_ACCENT
-        quote_bar.line.fill.background()
+        解析 Markdown 的 ## 标题作为每页主题，每页只展示核心要点，
+        避免一页塞满文字需要滚动。
 
-        # AI 标签
-        tag = slide.shapes.add_shape(
-            MSO_SHAPE.ROUNDED_RECTANGLE, Inches(1.1), Inches(1.5), Inches(1.2), Inches(0.35),
-        )
-        tag.fill.solid()
-        tag.fill.fore_color.rgb = _C_ACCENT
-        tag.line.fill.background()
-        tf_tag = tag.text_frame
-        p_tag = tf_tag.paragraphs[0]
-        p_tag.text = "AI 分析"
-        p_tag.font.size = Pt(10)
-        p_tag.font.color.rgb = _C_WHITE
-        p_tag.font.bold = True
-        p_tag.alignment = PP_ALIGN.CENTER
+        参数:
+            insights: AI 生成的 Markdown 文本
 
-        # 正文内容
-        self._body_box(slide, 1.1, 2.0, 11.2, 4.5, insights, font_size=13)
+        返回:
+            本方法消耗的页数（用于页码追踪）
+        """
+        if not insights or insights.startswith("（AI 洞察") or insights.startswith("## AI 经营洞察"):
+            # 占位符或空内容 → 只生成一页提示
+            slide = self._new_slide()
+            self._page_bg(slide, _C_OFF_WHITE)
+            self._title_bar(slide, "AI 经营洞察", "DeepSeek AI-Powered Analysis")
+            tag = slide.shapes.add_shape(
+                MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(1.5), Inches(1.2), Inches(0.35),
+            )
+            tag.fill.solid()
+            tag.fill.fore_color.rgb = _C_ACCENT
+            tag.line.fill.background()
+            tf_tag = tag.text_frame
+            p_tag = tf_tag.paragraphs[0]
+            p_tag.text = "AI 分析"
+            p_tag.font.size = Pt(10)
+            p_tag.font.color.rgb = _C_WHITE
+            p_tag.font.bold = True
+            p_tag.alignment = PP_ALIGN.CENTER
+            self._body_box(slide, 0.8, 2.0, 11.5, 1.5, "AI 洞察内容将在配置 API Key 后自动生成。", font_size=14, color=_C_GRAY_TEXT)
+            self._page_number(slide)
+            return 1
 
-        self._footer_line(slide)
-        self._page_number(slide, 7)
+        # ---- 按 ## 标题解析章节 ----
+        sections: list[tuple[str, str]] = []
+        current_title = "综合洞察"
+        current_lines: list[str] = []
+
+        for line in insights.split("\n"):
+            if line.startswith("## "):
+                if current_lines:
+                    sections.append((current_title, "\n".join(current_lines).strip()))
+                current_title = line[3:].strip()
+                current_lines = []
+            else:
+                current_lines.append(line)
+        if current_lines:
+            sections.append((current_title, "\n".join(current_lines).strip()))
+
+        # 过滤掉过短的无效章节
+        sections = [s for s in sections if len(s[1]) > 10]
+
+        # 如果没有解析出章节，把整段当一页
+        if not sections:
+            sections = [("AI 经营洞察", insights)]
+
+        page_count = 0
+        for idx, (title, content) in enumerate(sections):
+            slide = self._new_slide()
+            self._page_bg(slide, _C_OFF_WHITE)
+            subtitle = f"AI 分析 · 第 {idx + 1}/{len(sections)} 部分"
+            self._title_bar(slide, title, subtitle)
+
+            # 解析内容：提取纯文本行和要点，去掉 Markdown 标记
+            clean_lines: list[str] = []
+            for cl in content.split("\n"):
+                cl_stripped = cl.strip()
+                if not cl_stripped:
+                    continue
+                # 去掉 Markdown 粗体/斜体，保留文字
+                import re
+                clean = re.sub(r'\*\*(.*?)\*\*', r'\1', cl_stripped)
+                clean = re.sub(r'\*(.*?)\*', r'\1', clean)
+                # 保留关键数字格式
+                if clean.startswith("- ") or clean.startswith("* "):
+                    clean = "• " + clean[2:]
+                clean_lines.append(clean)
+
+            # 分两栏展示（内容多时）
+            mid = len(clean_lines) // 2
+            left_lines = clean_lines[:mid] if mid > 0 else []
+            right_lines = clean_lines[mid:] if mid > 0 else clean_lines
+
+            # 左栏
+            y_offset = 1.4
+            if left_lines:
+                box_text = "\n".join(left_lines)
+                self._body_box(slide, 0.8, y_offset, 5.8, 5.0, box_text, font_size=11)
+                # 右栏
+                if right_lines:
+                    box_text2 = "\n".join(right_lines)
+                    self._body_box(slide, 7.0, y_offset, 5.8, 5.0, box_text2, font_size=11)
+            else:
+                # 只有一栏
+                self._body_box(slide, 0.8, y_offset, 11.5, 5.0, "\n".join(clean_lines), font_size=12)
+
+            self._footer_line(slide)
+            self._page_number(slide)
+            page_count += 1
+
+        return page_count
 
     # ---- 9. 行动计划 ----
 
@@ -868,7 +941,7 @@ class PPTGenerator:
         p_n.font.size = Pt(11)
         p_n.font.color.rgb = _C_ORANGE
 
-        self._page_number(slide, 8)
+        self._page_number(slide)
 
     # ---- 10. 结束页 ----
 
