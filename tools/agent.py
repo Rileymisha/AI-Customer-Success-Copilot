@@ -411,7 +411,7 @@ class MultiToolAgent:
 
         elif tool_name == "report_generation":
             result = tool.run(
-                df=context.df_annotated or context.df,
+                df=context.df_annotated if context.df_annotated is not None else context.df,
                 categories=context.categories or {},
                 insights=context.insights or "（由 AI Agent 自动生成）",
                 chart_paths=context.chart_paths or {},
@@ -422,7 +422,7 @@ class MultiToolAgent:
 
         elif tool_name == "ppt_generation":
             result = tool.run(
-                df=context.df_annotated or context.df,
+                df=context.df_annotated if context.df_annotated is not None else context.df,
                 categories=context.categories or {},
                 insights=context.insights or "（由 AI Agent 自动生成）",
                 chart_paths=context.chart_paths or {},
