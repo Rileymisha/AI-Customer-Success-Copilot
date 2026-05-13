@@ -61,13 +61,13 @@ def get_sqlite_store() -> SQLiteStore:
 def main() -> None:
     """应用主函数：配置页面、侧边栏、主体内容。"""
     st.set_page_config(
-        page_title="AI 客户成功助手",
+        page_title="AI-Customer-Success-Copilot",
         page_icon="📊",
         layout="wide",
         initial_sidebar_state="expanded",
     )
 
-    st.title("AI_CS_Copilot — AI 客户成功助手")
+    st.title("AI-Customer-Success-Copilot — AI 客户成功助手")
     st.caption("分析客户经营数据 · 识别风险 · 生成经营建议与报告草案")
 
     # -------------------------------------------------------------------------
