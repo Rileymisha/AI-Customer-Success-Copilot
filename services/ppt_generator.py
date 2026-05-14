@@ -94,6 +94,9 @@ class PPTGenerator:
 
         # 页码计数器（从 0 开始，_page_number 先 ++ 再显示）
         self._page_num = 0
+        self._df = df
+        self._categories = categories
+        self._chart_paths = chart_paths
 
         total = len(df)
         high_risk = categories.get("high_risk", [])
@@ -107,6 +110,7 @@ class PPTGenerator:
         self._add_high_risk_detail(high_risk)
         self._add_high_value_slide(high_value)
         self._add_charts_grid(chart_paths)
+        self._add_ai_overview()
         self._add_ai_insights(insights)
         self._add_action_plan(high_risk, insights)
         self._add_closing()
@@ -220,14 +224,13 @@ class PPTGenerator:
         card.fill.fore_color.rgb = _C_WHITE
         card.line.color.rgb = _C_LIGHT_GRAY
         card.line.width = Pt(0.5)
-        # 阴影效果（通过叠加一个小偏移形状模拟）
+        # 阴影效果（浅灰偏移）
         shadow = slide.shapes.add_shape(
             MSO_SHAPE.RECTANGLE,
             Inches(left + 0.03), Inches(top + 0.03), Inches(width), Inches(height),
         )
         shadow.fill.solid()
-        shadow.fill.fore_color.rgb = RGBColor(0x00, 0x00, 0x00)
-        shadow.fill.fore_color.brightness = 0.85
+        shadow.fill.fore_color.rgb = RGBColor(0xE0, 0xE0, 0xE0)
         shadow.line.fill.background()
         # 把 card 移到最前（z-order）—— python-pptx 按添加顺序，所以先加 shadow 再加 card
 
@@ -268,6 +271,132 @@ class PPTGenerator:
         elif level == "中":
             return _C_ORANGE
         return _C_GREEN
+
+    # ==================================================================
+    # AI 洞察解析与渲染辅助方法
+    # ==================================================================
+
+    def _detect_section_type(self, title: str) -> str:
+        """根据标题检测 section 类型。"""
+        if "经营概况" in title or "概况" in title:
+            return "overview"
+        if "风险" in title:
+            return "risk"
+        if "策略" in title or "分层" in title or "经营策略" in title:
+            return "strategy"
+        if "客户清单" in title or "重点客户" in title:
+            return "list"
+        if "行动" in title or "计划" in title:
+            return "action"
+        return "default"
+
+    def _parse_insight_sections(self, insights: str) -> list[tuple[str, str]]:
+        """将 Markdown 按 ## 标题解析为 (标题, 内容) 章节列表。"""
+        sections: list[tuple[str, str]] = []
+        current_title = "综合洞察"
+        current_lines: list[str] = []
+        for line in insights.split("\n"):
+            if line.startswith("## "):
+                if current_lines:
+                    sections.append((current_title, "\n".join(current_lines).strip()))
+                current_title = line[3:].strip()
+                current_lines = []
+            else:
+                current_lines.append(line)
+        if current_lines:
+            sections.append((current_title, "\n".join(current_lines).strip()))
+        sections = [s for s in sections if len(s[1]) > 10]
+        return sections
+
+    def _merge_wrapper_sections(self, sections: list[tuple[str, str]]) -> list[tuple[str, str]]:
+        """将"综合洞察/AI 经营洞察"包裹段的内容合并到下一节，避免重复幻灯片。"""
+        if len(sections) < 2:
+            return sections
+        first_title = sections[0][0]
+        if any(kw in first_title for kw in ("洞察", "综合")):
+            wrapper_content = sections[0][1]
+            main_title, main_content = sections[1]
+            sections[1] = (main_title, wrapper_content + "\n\n" + main_content)
+            sections.pop(0)
+        return sections
+
+    def _clean_markdown_text(self, text: str) -> str:
+        """去除 Markdown 格式标记，保留内容。"""
+        import re
+        text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
+        text = re.sub(r'\*(.*?)\*', r'\1', text)
+        lines = []
+        for line in text.split("\n"):
+            sl = line.strip()
+            if sl.startswith("- ") or sl.startswith("* "):
+                sl = "• " + sl[2:]
+            lines.append(sl)
+        return "\n".join(lines)
+
+    def _extract_strategies(self, content: str) -> dict:
+        """从 AI 内容中提取各策略描述。"""
+        strategies: dict[str, str] = {}
+        lines = content.split("\n")
+        current_key: str | None = None
+        for line in lines:
+            sl = line.strip()
+            if "高风险" in sl and any(kw in sl for kw in ("策略", "挽回", "客户")):
+                current_key = "high_risk"
+            elif "高价值" in sl and any(kw in sl for kw in ("策略", "维护", "客户")):
+                current_key = "high_value"
+            elif "增长" in sl and any(kw in sl for kw in ("策略", "潜力", "客户")):
+                current_key = "growth"
+            elif "行业" in sl and any(kw in sl for kw in ("策略", "专项")):
+                current_key = "industry"
+            elif sl.startswith("- ") and current_key and current_key not in strategies:
+                strategies[current_key] = sl[2:]
+        defaults = {
+            "high_risk": "高层拜访 + 紧急续约谈判，制定个性化挽回方案",
+            "high_value": "专属 CSM 配备 + 季度 QBR 复盘 + 提前 90 天续约提醒",
+            "growth": "CSM 专项辅导 + 产品深度培训 + 行业案例分享",
+            "industry": "行业痛点调研 + 功能定制 + 专项服务小组",
+        }
+        for k, v in defaults.items():
+            strategies.setdefault(k, v)
+        return strategies
+
+    def _extract_action_items(self, content: str) -> list[str]:
+        """从 AI 内容中提取行动项。"""
+        items: list[str] = []
+        for line in content.split("\n"):
+            sl = line.strip()
+            if not sl or "##" in sl:
+                continue
+            if sl[0].isdigit() and ". " in sl[:4]:
+                parts = sl.split(". ", 1)
+                if len(parts) > 1:
+                    items.append(parts[1].replace("**", "").replace("*", ""))
+            elif sl.startswith("- ") or sl.startswith("* "):
+                items.append(sl[2:].replace("**", "").replace("*", ""))
+        return items[:5]
+
+    def _parse_customers_from_content(self, content: str) -> list[dict]:
+        """从 AI 文本中尝试解析客户列表（备用 fallback）。"""
+        import re
+        customers: list[dict] = []
+        current: dict = {}
+        for line in content.split("\n"):
+            sl = line.strip()
+            m = re.match(r'^\d+[.、]\s*\*{0,2}(.+?)\*{0,2}\s*[（(](.+?)[）)]', sl)
+            if m:
+                if current:
+                    customers.append(current)
+                current = {
+                    "customer_name": m.group(1).strip(),
+                    "industry": m.group(2).strip(),
+                }
+            elif sl.startswith("- ") and current:
+                key_val = sl[2:]
+                if "风险" in key_val:
+                    current["risk_level"] = key_val.split("：")[-1] if "：" in key_val else "高"
+        if current:
+            customers.append(current)
+        return customers
 
     # ==================================================================
     # 各页幻灯片
@@ -731,23 +860,207 @@ class PPTGenerator:
 
         self._page_number(slide)
 
-    # ---- 8. AI 经营洞察（多页，自动按 ## 章节拆分） ----
+    # ---- 8. AI 经营洞察总览（前言介绍页） ----
+
+    def _add_ai_overview(self) -> None:
+        """AI 经营洞察总览页：五维全景预览，图文结合，一眼看懂核心内容。"""
+        slide = self._new_slide()
+        self._page_bg(slide, _C_OFF_WHITE)
+        self._title_bar(slide, "AI 经营洞察总览", "五维全景分析 · DeepSeek 智能驱动")
+
+        df = self._df
+        total = len(df)
+        high_risk = self._categories.get("high_risk", [])
+        high_value = self._categories.get("high_value", [])
+        growth = self._categories.get("growth", [])
+
+        risk_counts = df["risk_level"].value_counts().to_dict()
+        high_risk_n = risk_counts.get("高", 0)
+        risk_pct = high_risk_n / max(total, 1) * 100
+        med_risk_count = len([c for c in high_risk if "医疗" in c.get("industry", "")])
+        top_complaint = max(high_risk, key=lambda c: c.get("complaint_count", 0), default={})
+        top_name = top_complaint.get("customer_name", "")
+        top_complaints = top_complaint.get("complaint_count", 0)
+
+        modules = [
+            {
+                "title": "经营概况",
+                "icon": "01",
+                "color": _C_ACCENT,
+                "value": str(total),
+                "value_label": "总客户",
+                "lines": [
+                    f"覆盖 {df['industry'].nunique()} 行业 · {df['region'].nunique()} 区域",
+                    f"月均 GMV ¥{df['monthly_gmv'].mean():,.0f}",
+                ],
+            },
+            {
+                "title": "风险分析",
+                "icon": "02",
+                "color": _C_RED,
+                "value": f"{risk_pct:.0f}%",
+                "value_label": "高风险占比",
+                "lines": [
+                    f"高风险 {high_risk_n} 个 · 中风险 {risk_counts.get('中', 0)} 个",
+                    "医疗健康行业集中爆发，续约逾期严重",
+                ],
+            },
+            {
+                "title": "分层策略",
+                "icon": "03",
+                "color": _C_GREEN,
+                "value": "3",
+                "value_label": "策略层级",
+                "lines": [
+                    "高风险：紧急挽回 + 48h 响应",
+                    "高价值：专属 CSM + QBR 复盘",
+                    "增长潜力：功能激活 + 深度辅导",
+                ],
+            },
+            {
+                "title": "重点客户",
+                "icon": "04",
+                "color": _C_ORANGE,
+                "value": str(len(high_risk)),
+                "value_label": "需紧急干预",
+                "lines": [
+                    f"TOP 重点含 {med_risk_count} 家医疗健康",
+                    f"{top_name or '—'} 投诉 {top_complaints} 次/月，优先级 P0",
+                ],
+            },
+            {
+                "title": "行动计划",
+                "icon": "05",
+                "color": _C_PRIMARY,
+                "value": "5",
+                "value_label": "本周任务",
+                "lines": [
+                    "P0：本周紧急回访 + 专项小组成立",
+                    "P1：高价值健康度检查 + 激活计划",
+                ],
+            },
+        ]
+
+        # 上行 3 个卡片
+        for i in range(3):
+            x = 0.8 + i * 4.1
+            self._render_overview_card(slide, x, 1.4, 3.5, 2.4, modules[i])
+
+        # 下行 2 个卡片（居中）
+        for i in range(2):
+            x = 2.8 + i * 4.5
+            self._render_overview_card(slide, x, 4.0, 3.5, 2.4, modules[3 + i])
+
+        # 底部总结条
+        summary_bar = slide.shapes.add_shape(
+            MSO_SHAPE.ROUNDED_RECTANGLE, Inches(0.8), Inches(6.6), Inches(11.7), Inches(0.55),
+        )
+        summary_bar.fill.solid()
+        summary_bar.fill.fore_color.rgb = _C_PRIMARY
+        summary_bar.line.fill.background()
+
+        tb = slide.shapes.add_textbox(Inches(1.0), Inches(6.65), Inches(11.3), Inches(0.45))
+        tf = tb.text_frame
+        p = tf.paragraphs[0]
+        p.text = (
+            f"▎ 核心结论：{total} 个客户中，{high_risk_n} 个处于高风险（占比 {risk_pct:.1f}%），"
+            f"{len(high_value)} 个高价值客户需重点维护，"
+            f"{len(growth)} 个增长潜力客户具备 uplift 空间。本周建议启动紧急挽回流程。"
+        )
+        p.font.size = Pt(12)
+        p.font.color.rgb = _C_WHITE
+        p.font.bold = True
+
+        self._footer_line(slide)
+        self._page_number(slide)
+
+    def _render_overview_card(
+        self, slide: Any, left: float, top: float,
+        width: float, height: float, module: dict,
+    ) -> None:
+        """渲染概览卡片：圆角矩形 + 顶部色条 + 编号 + 标题 + 大数字 + 描述。"""
+        # 卡片背景
+        card = slide.shapes.add_shape(
+            MSO_SHAPE.ROUNDED_RECTANGLE,
+            Inches(left), Inches(top), Inches(width), Inches(height),
+        )
+        card.fill.solid()
+        card.fill.fore_color.rgb = _C_WHITE
+        card.line.color.rgb = _C_LIGHT_GRAY
+        card.line.width = Pt(0.5)
+
+        # 顶部彩色条
+        accent = slide.shapes.add_shape(
+            MSO_SHAPE.RECTANGLE,
+            Inches(left), Inches(top), Inches(width), Inches(0.06),
+        )
+        accent.fill.solid()
+        accent.fill.fore_color.rgb = module["color"]
+        accent.line.fill.background()
+
+        # 编号圆形
+        circle = slide.shapes.add_shape(
+            MSO_SHAPE.OVAL,
+            Inches(left + 0.2), Inches(top + 0.2), Inches(0.45), Inches(0.45),
+        )
+        circle.fill.solid()
+        circle.fill.fore_color.rgb = module["color"]
+        circle.line.fill.background()
+
+        tf_c = circle.text_frame
+        tf_c.paragraphs[0].text = module["icon"]
+        tf_c.paragraphs[0].font.size = Pt(11)
+        tf_c.paragraphs[0].font.color.rgb = _C_WHITE
+        tf_c.paragraphs[0].font.bold = True
+        tf_c.paragraphs[0].alignment = PP_ALIGN.CENTER
+        tf_c.word_wrap = False
+
+        # 标题
+        tb_t = slide.shapes.add_textbox(
+            Inches(left + 0.75), Inches(top + 0.22), Inches(width - 1.0), Inches(0.4),
+        )
+        p_t = tb_t.text_frame.paragraphs[0]
+        p_t.text = module["title"]
+        p_t.font.size = Pt(16)
+        p_t.font.color.rgb = _C_DARK_TEXT
+        p_t.font.bold = True
+
+        # 大数字
+        tb_v = slide.shapes.add_textbox(
+            Inches(left + 0.2), Inches(top + 0.75), Inches(width - 0.4), Inches(0.55),
+        )
+        p_v = tb_v.text_frame.paragraphs[0]
+        p_v.text = module["value"]
+        p_v.font.size = Pt(28)
+        p_v.font.color.rgb = module["color"]
+        p_v.font.bold = True
+
+        # 数字标签
+        tb_vl = slide.shapes.add_textbox(
+            Inches(left + 0.2), Inches(top + 1.25), Inches(width - 0.4), Inches(0.25),
+        )
+        p_vl = tb_vl.text_frame.paragraphs[0]
+        p_vl.text = module["value_label"]
+        p_vl.font.size = Pt(10)
+        p_vl.font.color.rgb = _C_GRAY_TEXT
+
+        # 描述行
+        for j, line in enumerate(module["lines"]):
+            tb_d = slide.shapes.add_textbox(
+                Inches(left + 0.2), Inches(top + 1.55 + j * 0.28), Inches(width - 0.4), Inches(0.28),
+            )
+            p_d = tb_d.text_frame.paragraphs[0]
+            p_d.text = line
+            p_d.font.size = Pt(10)
+            p_d.font.color.rgb = _C_DARK_TEXT
+
+    # ---- 9. AI 经营洞察（多页，分类型视觉化渲染） ----
 
     def _add_ai_insights(self, insights: str) -> int:
         """
-        将 AI 洞察按章节拆分到多页幻灯片。
-
-        解析 Markdown 的 ## 标题作为每页主题，每页只展示核心要点，
-        避免一页塞满文字需要滚动。
-
-        参数:
-            insights: AI 生成的 Markdown 文本
-
-        返回:
-            本方法消耗的页数（用于页码追踪）
+        AI 洞察多页渲染入口：解析章节 -> 合并包裹段 -> 分类型渲染。
         """
-        if not insights or insights.startswith("（AI 洞察") or insights.startswith("## AI 经营洞察"):
-            # 占位符或空内容 → 只生成一页提示
+        if not insights or "（AI 洞察" in insights[:50] or "（由 AI Agent 自动生成）" in insights[:50]:
             slide = self._new_slide()
             self._page_bg(slide, _C_OFF_WHITE)
             self._title_bar(slide, "AI 经营洞察", "DeepSeek AI-Powered Analysis")
@@ -764,78 +1077,307 @@ class PPTGenerator:
             p_tag.font.color.rgb = _C_WHITE
             p_tag.font.bold = True
             p_tag.alignment = PP_ALIGN.CENTER
-            self._body_box(slide, 0.8, 2.0, 11.5, 1.5, "AI 洞察内容将在配置 API Key 后自动生成。", font_size=14, color=_C_GRAY_TEXT)
+            self._body_box(slide, 0.8, 2.0, 11.5, 1.5,
+                           "AI 洞察内容将在配置 API Key 后自动生成。",
+                           font_size=14, color=_C_GRAY_TEXT)
             self._page_number(slide)
             return 1
 
-        # ---- 按 ## 标题解析章节 ----
-        sections: list[tuple[str, str]] = []
-        current_title = "综合洞察"
-        current_lines: list[str] = []
-
-        for line in insights.split("\n"):
-            if line.startswith("## "):
-                if current_lines:
-                    sections.append((current_title, "\n".join(current_lines).strip()))
-                current_title = line[3:].strip()
-                current_lines = []
-            else:
-                current_lines.append(line)
-        if current_lines:
-            sections.append((current_title, "\n".join(current_lines).strip()))
-
-        # 过滤掉过短的无效章节
-        sections = [s for s in sections if len(s[1]) > 10]
-
-        # 如果没有解析出章节，把整段当一页
+        sections = self._parse_insight_sections(insights)
+        sections = self._merge_wrapper_sections(sections)
         if not sections:
             sections = [("AI 经营洞察", insights)]
 
         page_count = 0
         for idx, (title, content) in enumerate(sections):
+            stype = self._detect_section_type(title)
             slide = self._new_slide()
             self._page_bg(slide, _C_OFF_WHITE)
-            subtitle = f"AI 分析 · 第 {idx + 1}/{len(sections)} 部分"
+            subtitle = f"AI 分析 \u00b7 第 {idx + 1}/{len(sections)} 部分"
             self._title_bar(slide, title, subtitle)
 
-            # 解析内容：提取纯文本行和要点，去掉 Markdown 标记
-            clean_lines: list[str] = []
-            for cl in content.split("\n"):
-                cl_stripped = cl.strip()
-                if not cl_stripped:
-                    continue
-                # 去掉 Markdown 粗体/斜体，保留文字
-                import re
-                clean = re.sub(r'\*\*(.*?)\*\*', r'\1', cl_stripped)
-                clean = re.sub(r'\*(.*?)\*', r'\1', clean)
-                # 保留关键数字格式
-                if clean.startswith("- ") or clean.startswith("* "):
-                    clean = "• " + clean[2:]
-                clean_lines.append(clean)
-
-            # 分两栏展示（内容多时）
-            mid = len(clean_lines) // 2
-            left_lines = clean_lines[:mid] if mid > 0 else []
-            right_lines = clean_lines[mid:] if mid > 0 else clean_lines
-
-            # 左栏
-            y_offset = 1.4
-            if left_lines:
-                box_text = "\n".join(left_lines)
-                self._body_box(slide, 0.8, y_offset, 5.8, 5.0, box_text, font_size=11)
-                # 右栏
-                if right_lines:
-                    box_text2 = "\n".join(right_lines)
-                    self._body_box(slide, 7.0, y_offset, 5.8, 5.0, box_text2, font_size=11)
+            if stype == "overview":
+                self._render_insight_overview(slide, content)
+            elif stype == "risk":
+                self._render_insight_risk(slide, content)
+            elif stype == "strategy":
+                self._render_insight_strategy(slide, content)
+            elif stype == "list":
+                self._render_insight_list(slide, content)
+            elif stype == "action":
+                self._render_insight_action(slide, content)
             else:
-                # 只有一栏
-                self._body_box(slide, 0.8, y_offset, 11.5, 5.0, "\n".join(clean_lines), font_size=12)
+                self._render_insight_default(slide, title, content)
 
             self._footer_line(slide)
             self._page_number(slide)
             page_count += 1
 
         return page_count
+
+    # ------------------------------------------------------------------
+    # AI 洞察渲染器
+    # ------------------------------------------------------------------
+
+    def _render_insight_overview(self, slide: Any, content: str) -> None:
+        """经营概况：4 个 KPI 卡片 + 行业分布图 + AI 评述。"""
+        import pandas as pd
+        df = self._df
+        kpis = [
+            ("总客户数", str(len(df)), _C_ACCENT),
+            ("覆盖行业", f'{df["industry"].nunique()} 个', _C_GREEN),
+            ("覆盖区域", f'{df["region"].nunique()} 个', _C_ORANGE),
+            ("月均 GMV", f'¥{df["monthly_gmv"].mean():,.0f}', _C_PRIMARY),
+        ]
+        for i, (label, value, color) in enumerate(kpis):
+            self._card(slide, 0.8 + i * 3.1, 1.4, 2.8, 1.2, label, value, color)
+
+        clean = self._clean_markdown_text(content)
+        chart_path = self._chart_paths.get("industry_bar", "")
+        if chart_path:
+            slide.shapes.add_picture(chart_path, Inches(0.8), Inches(2.9), Inches(6.5), Inches(3.8))
+            self._body_box(slide, 7.5, 2.9, 5.0, 3.8, clean[:500], font_size=11)
+        else:
+            self._body_box(slide, 0.8, 2.9, 11.5, 3.8, clean[:600], font_size=12)
+
+    def _render_insight_risk(self, slide: Any, content: str) -> None:
+        """风险分析：大数字 + 风险条 + 饼图 + 分析文本。"""
+        df = self._df
+        risk_counts = df["risk_level"].value_counts().to_dict()
+        high_n = risk_counts.get("高", 0)
+        mid_n = risk_counts.get("中", 0)
+        low_n = risk_counts.get("低", 0)
+
+        tb = slide.shapes.add_textbox(Inches(1.2), Inches(1.4), Inches(4), Inches(1.2))
+        p = tb.text_frame.paragraphs[0]
+        p.text = str(high_n)
+        p.font.size = Pt(72)
+        p.font.color.rgb = _C_RED
+        p.font.bold = True
+
+        tb = slide.shapes.add_textbox(Inches(1.2), Inches(2.6), Inches(4), Inches(0.4))
+        p = tb.text_frame.paragraphs[0]
+        p.text = "高风险客户"
+        p.font.size = Pt(14)
+        p.font.color.rgb = _C_GRAY_TEXT
+
+        max_n = max(high_n, mid_n, low_n, 1)
+        for i, (lbl, cnt, clr) in enumerate([
+            ("高", high_n, _C_RED),
+            ("中", mid_n, _C_ORANGE),
+            ("低", low_n, _C_GREEN),
+        ]):
+            y = 3.2 + i * 0.9
+            tb = slide.shapes.add_textbox(Inches(1.2), Inches(y), Inches(2), Inches(0.3))
+            p = tb.text_frame.paragraphs[0]
+            p.text = f"{lbl}风险  {cnt}"
+            p.font.size = Pt(13)
+            p.font.color.rgb = clr
+            p.font.bold = True
+            bar_w = (cnt / max_n) * 3.5
+            if bar_w > 0:
+                bar = slide.shapes.add_shape(
+                    MSO_SHAPE.ROUNDED_RECTANGLE,
+                    Inches(1.2), Inches(y + 0.32), Inches(bar_w), Inches(0.22),
+                )
+                bar.fill.solid()
+                bar.fill.fore_color.rgb = clr
+                bar.line.fill.background()
+
+        chart_path = self._chart_paths.get("risk_pie", "")
+        if chart_path:
+            slide.shapes.add_picture(chart_path, Inches(6.5), Inches(1.4), Inches(5.5), Inches(4.5))
+
+        clean = self._clean_markdown_text(content)
+        self._body_box(slide, 0.8, 5.8, 11.5, 1.0, clean[:300], font_size=11, color=_C_GRAY_TEXT)
+
+    def _render_insight_strategy(self, slide: Any, content: str) -> None:
+        """分层经营策略：2x2 彩色策略卡片。"""
+        strategies = self._extract_strategies(content)
+        cards = [
+            ("高风险客户挽回", _C_RED, strategies["high_risk"]),
+            ("高价值客户维护", _C_GREEN, strategies["high_value"]),
+            ("增长潜力客户", _C_ORANGE, strategies["growth"]),
+            ("行业专项策略", _C_ACCENT, strategies["industry"]),
+        ]
+        positions = [(0.8, 1.5, 5.7, 2.6), (6.8, 1.5, 5.7, 2.6),
+                     (0.8, 4.3, 5.7, 2.6), (6.8, 4.3, 5.7, 2.6)]
+
+        for (label, color, desc), (x, y, w, h) in zip(cards, positions):
+            card = slide.shapes.add_shape(
+                MSO_SHAPE.ROUNDED_RECTANGLE, Inches(x), Inches(y), Inches(w), Inches(h),
+            )
+            card.fill.solid()
+            card.fill.fore_color.rgb = _C_WHITE
+            card.line.color.rgb = _C_LIGHT_GRAY
+            card.line.width = Pt(0.5)
+
+            accent = slide.shapes.add_shape(
+                MSO_SHAPE.RECTANGLE, Inches(x), Inches(y), Inches(0.08), Inches(h),
+            )
+            accent.fill.solid()
+            accent.fill.fore_color.rgb = color
+            accent.line.fill.background()
+
+            circle = slide.shapes.add_shape(
+                MSO_SHAPE.OVAL, Inches(x + 0.35), Inches(y + 0.3), Inches(0.5), Inches(0.5),
+            )
+            circle.fill.solid()
+            circle.fill.fore_color.rgb = color
+            circle.line.fill.background()
+
+            tb = slide.shapes.add_textbox(Inches(x + 1.0), Inches(y + 0.35), Inches(w - 1.3), Inches(0.4))
+            p = tb.text_frame.paragraphs[0]
+            p.text = label
+            p.font.size = Pt(15)
+            p.font.color.rgb = _C_DARK_TEXT
+            p.font.bold = True
+
+            tb = slide.shapes.add_textbox(Inches(x + 0.35), Inches(y + 0.95), Inches(w - 0.7), Inches(h - 1.2))
+            tf = tb.text_frame
+            tf.word_wrap = True
+            p = tf.paragraphs[0]
+            p.text = desc
+            p.font.size = Pt(11)
+            p.font.color.rgb = _C_GRAY_TEXT
+
+    def _render_insight_list(self, slide: Any, content: str) -> None:
+        """重点客户清单：客户卡片（非表格），支持长名称自动换行。"""
+        customers = self._categories.get("high_risk", [])
+        if not customers:
+            customers = self._parse_customers_from_content(content)
+        if not customers:
+            self._body_box(slide, 0.8, 1.5, 11, 1, "暂无重点客户数据。",
+                           font_size=14, color=_C_GRAY_TEXT)
+            return
+
+        for i, c in enumerate(customers[:8]):
+            col = i % 4
+            row = i // 4
+            x = 0.8 + col * 3.1
+            y = 1.4 + row * 2.8
+
+            name = str(c.get("customer_name", ""))
+            industry = str(c.get("industry", ""))
+            gmv = c.get("monthly_gmv", 0)
+            login = c.get("login_days", 0)
+            complaints = c.get("complaint_count", 0)
+
+            card = slide.shapes.add_shape(
+                MSO_SHAPE.ROUNDED_RECTANGLE, Inches(x), Inches(y), Inches(2.8), Inches(2.4),
+            )
+            card.fill.solid()
+            card.fill.fore_color.rgb = _C_WHITE
+            card.line.color.rgb = _C_LIGHT_GRAY
+            card.line.width = Pt(0.5)
+
+            accent = slide.shapes.add_shape(
+                MSO_SHAPE.RECTANGLE, Inches(x), Inches(y), Inches(2.8), Inches(0.06),
+            )
+            accent.fill.solid()
+            accent.fill.fore_color.rgb = _C_RED
+            accent.line.fill.background()
+
+            tb = slide.shapes.add_textbox(Inches(x + 0.2), Inches(y + 0.2), Inches(2.4), Inches(0.5))
+            tf = tb.text_frame
+            tf.word_wrap = True
+            p = tf.paragraphs[0]
+            p.text = name
+            p.font.size = Pt(13)
+            p.font.color.rgb = _C_DARK_TEXT
+            p.font.bold = True
+
+            tag = slide.shapes.add_shape(
+                MSO_SHAPE.ROUNDED_RECTANGLE,
+                Inches(x + 0.2), Inches(y + 0.75), Inches(1.0), Inches(0.28),
+            )
+            tag.fill.solid()
+            tag.fill.fore_color.rgb = RGBColor(0xE8, 0xF0, 0xFE)
+            tag.line.fill.background()
+            tf_tag = tag.text_frame
+            tf_tag.paragraphs[0].text = industry
+            tf_tag.paragraphs[0].font.size = Pt(9)
+            tf_tag.paragraphs[0].font.color.rgb = _C_ACCENT
+            tf_tag.paragraphs[0].alignment = PP_ALIGN.CENTER
+
+            for j, m in enumerate([
+                f"GMV: ¥{gmv:,}",
+                f"登录: {login} 天/月",
+                f"投诉: {complaints} 次",
+            ]):
+                tb = slide.shapes.add_textbox(
+                    Inches(x + 0.2), Inches(y + 1.15 + j * 0.3), Inches(2.4), Inches(0.28),
+                )
+                p = tb.text_frame.paragraphs[0]
+                p.text = m
+                p.font.size = Pt(10)
+                p.font.color.rgb = _C_GRAY_TEXT
+
+    def _render_insight_action(self, slide: Any, content: str) -> None:
+        """本周行动计划：横向时间轴节点。"""
+        items = self._extract_action_items(content)
+        if len(items) < 2:
+            items = ["紧急沟通高风险客户", "启动续约谈判", "投诉处理闭环",
+                     "产品培训安排", "客户健康度评估"]
+
+        line_y = 2.5
+        line = slide.shapes.add_shape(
+            MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(line_y), Inches(11.7), Inches(0.03),
+        )
+        line.fill.solid()
+        line.fill.fore_color.rgb = _C_LIGHT_GRAY
+        line.line.fill.background()
+
+        colors = [_C_RED, _C_ORANGE, _C_ACCENT, _C_GREEN, _C_PRIMARY]
+        max_n = min(len(items), 5)
+
+        for i in range(max_n):
+            x = 0.8 + i * 2.8
+            node = slide.shapes.add_shape(
+                MSO_SHAPE.OVAL, Inches(x + 0.6), Inches(line_y - 0.18), Inches(0.38), Inches(0.38),
+            )
+            node.fill.solid()
+            node.fill.fore_color.rgb = colors[i]
+            node.line.fill.background()
+
+            tf = node.text_frame
+            tf.paragraphs[0].text = str(i + 1)
+            tf.paragraphs[0].font.size = Pt(10)
+            tf.paragraphs[0].font.color.rgb = _C_WHITE
+            tf.paragraphs[0].font.bold = True
+            tf.paragraphs[0].alignment = PP_ALIGN.CENTER
+            tf.word_wrap = False
+
+            tb = slide.shapes.add_textbox(Inches(x), Inches(line_y + 0.4), Inches(2.4), Inches(3.5))
+            tf = tb.text_frame
+            tf.word_wrap = True
+            p = tf.paragraphs[0]
+            p.text = items[i]
+            p.font.size = Pt(12)
+            p.font.color.rgb = _C_DARK_TEXT
+            p.font.bold = True
+
+            for sub in self._get_sub_items(i):
+                p2 = tf.add_paragraph()
+                p2.text = f"→ {sub}"
+                p2.font.size = Pt(9)
+                p2.font.color.rgb = _C_GRAY_TEXT
+
+    def _render_insight_default(self, slide: Any, title: str, content: str) -> None:
+        """默认回退渲染：纯文本布局。"""
+        clean = self._clean_markdown_text(content)
+        self._body_box(slide, 0.8, 1.4, 11.5, 5.5, clean[:800], font_size=12)
+
+    def _get_sub_items(self, idx: int) -> list[str]:
+        """为行动项提供默认子步骤。"""
+        pool = [
+            ["识别 TOP 3 风险客户", "48 小时内高管介入"],
+            ["准备续约方案", "协商折扣条款"],
+            ["分配投诉工单", "72 小时闭环"],
+            ["确定培训时间", "准备培训材料"],
+            ["收集客户反馈", "更新健康度评分"],
+        ]
+        return pool[idx] if idx < len(pool) else []
 
     # ---- 9. 行动计划 ----
 
